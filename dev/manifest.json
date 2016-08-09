@@ -4,22 +4,19 @@
 	"description": "__MSG_extDesc__",
 	"version": "0.1.0",
 	"default_locale": "en",
-	"minimum_chrome_version": "28",
+	"minimum_chrome_version": "42",
 	"icons": {
-		"128": "img/ext_icons/default.png"
+		"128": "img/ext_icons/active.png"
 	},
 	"browser_action": {
-		"default_icon": {
-			"default": "img/ext_icons/default.png",
-		},
+		"default_icon": "img/ext_icons/default.png",
 		"default_title": "__MSG_extName__",
-		"default_popup": "popup.html"
+		"default_popup": "html/popup.html"
 	},
 	"background": {
-		"scripts": ["js/lib/jquery.min.js", "js/storage.js", "js/background.js"],
+		"scripts": ["js/lib/jquery.min.js", "js/background.js"],
 		"persistent": false
 	},
-	"options_page": "options.html",
 	"incognito": "split",
 	"offline_enabled": true,
 	"permissions": [

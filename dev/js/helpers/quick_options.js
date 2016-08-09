@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
 	}
 
 	function saveToStorage(val) {
-		storage.area.set(val, function () {
+		storageOptions.area.set(val, function () {
 			showMessage(chrome.runtime.lastError ? showMessage('error') : showMessage('success'));
 			document.dispatchEvent(new CustomEvent('optionSaved', {
 				detail: {
@@ -21,7 +21,7 @@ window.addEventListener('load', function () {
 		});
 	}
 
-	storage.area.get(storage.default_options, function (items) {
+	storageOptions.area.get(storageOptions.default_options, function (items) {
 		var inputs = document.querySelectorAll('input'),
 		selects = document.querySelectorAll('select'),
 		textareas = document.querySelectorAll('textarea');

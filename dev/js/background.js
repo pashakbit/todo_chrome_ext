@@ -1,7 +1,9 @@
-chrome.runtime.onInstalled.addListener(function (details) {
+"use strict";
+
+chrome.runtime.onInstalled.addListener((details) => {
 	function setDefaults(callback) {
-		storage.area.get(function (stored_options) {
-			var default_options = storage.default_options,
+		storageOptions.area.get((stored_options) => {
+			var default_options = storageOptions.default_options,
 			option,
 			new_options = {};
 			for (option in default_options) {
@@ -10,7 +12,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 				}
 			}
 			if (Object.keys(new_options).length !== 0) {
-				storage.area.set(new_options, function () {
+				storageOptions.area.set(new_options, () => {
 					if (typeof callback === 'function') {
 						callback();
 					}
@@ -39,6 +41,12 @@ chrome.runtime.onInstalled.addListener(function (details) {
 	}
 });
 
-chrome.runtime.onUpdateAvailable.addListener(function (details) {
+chrome.runtime.onUpdateAvailable.addListener((details) => {
 	chrome.runtime.reload();
 });
+
+
+
+function setIcon(imgName) {
+	chrome.browserAction.setIcon({"path": "../img/ext_icons/" + imgName});
+}

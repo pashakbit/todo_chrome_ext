@@ -9,22 +9,29 @@
     "todo light",
     "todo chrome ext"
   ],
-  "author": "Kokovin @PashaK Pavel <kokovinpavel@yandex.ru>",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pashakbit/todo_chrome_ext"
+  },
+  "bugs": {
+    "url": "https://github.com/pashakbit/todo_chrome_ext/issue"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-cssmin": "^0.1.7",
     "gulp-htmlmin": "^2.0.0",
     "gulp-if": "^2.0.1",
     "gulp-imagemin": "^3.0.2",
+    "gulp-jsmin": "^0.1.5",
     "gulp-jsonmin": "^1.1.0",
     "gulp-newer": "^1.2.0",
     "gulp-postcss": "^6.1.1",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^2.0.0",
     "postcss-cssnext": "^2.7.0",
     "postcss-for": "^2.1.1",
     "postcss-foreach": "0.0.3",
     "yargs": "^4.8.1"
-  }
+  },
+  "author": "Kokovin @PashaK Pavel <kokovinpavel@yandex.ru>",
+  "license": "MIT"
 }

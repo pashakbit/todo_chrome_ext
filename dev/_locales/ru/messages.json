@@ -1,0 +1,14 @@
+{
+	"extName": {
+		"message": "Todo Light"
+	},
+	"extDesc": {
+		"message": "Короткое описание расширения"
+	},
+	"lang": {
+		"message": "ru"
+	},
+	"extInfo": {
+		"message": "2016 Copyright, MIT License"
+	}
+}

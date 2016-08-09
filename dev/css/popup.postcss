@@ -1,0 +1,200 @@
+/* --------------------- variables --------------------- */
+:root {
+	--popupWidth: 400px;
+	--popupHeight: 600px;
+
+	--subElHeight: calc(var(--popupHeight) / 15);
+
+	--mainFont: 300 normal calc(var(--subElHeight) / 2)/var(--subElHeight) Arial Narrow;
+	--mainBg: #5e7b89;
+	--mainColor: #fff;
+	--mainPadding: .4rem 1rem;
+	--mainBR: 2px;
+	--mainBC: #435862;
+
+	--contentFont: 300 normal 130%/150% Arial Narrow;
+	--contentBg: #f7f7f7;
+	--contentColor: #333;
+}
+/* ===================================================== */
+
+
+/* -------------------- basic style -------------------- */
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+html, body {
+	padding: 0;
+	margin: 0;
+}
+.app {
+	position: relative;
+	overflow: hidden;
+
+	width: var(--popupWidth);
+	height: var(--popupHeight);
+
+	font: var(--mainFont);
+	color: var(--mainColor);
+}
+.icon {
+	display: inline-block;
+
+	width: 100%;
+	height: 100%;
+
+	cursor: pointer;
+}
+/* ===================================================== */
+
+
+/* -------------------- header block ------------------- */
+.header {
+	width: 100%;
+	height: var(--subElHeight);
+
+	background: var(--mainBg);
+
+	text-align: center;
+
+	& .brand {
+		display: inline-block;
+		overflow: hidden;
+
+		width: var(--subElHeight);
+		height: var(--subElHeight);
+
+		vertical-align: top;
+	}
+
+	& .curtask {
+		display: inline-block;
+		overflow: hidden;
+
+		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
+		height: var(--subElHeight);
+
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: top;
+
+		margin-left: -.3rem;
+		margin-right: -.3rem;
+		padding-left: .4rem;
+		padding-right: .4rem;
+	}
+
+	& .search {
+		position: relative;
+		display: inline-block;
+
+		width: var(--subElHeight);
+		height: var(--subElHeight);
+
+		vertical-align: top;
+
+		&__text {
+			position: absolute;
+			display: none;
+
+			width: calc(var(--popupWidth) - (var(--subElHeight) * 2) - 2rem);
+			height: calc(var(--subElHeight) * 0.8);
+			line-height: calc(var(--subElHeight) * 0.8);
+
+			left: calc(-var(--popupWidth) + (var(--subElHeight) * 2) + 1rem);
+			top: calc(var(--subElHeight) * 0.1);
+
+			padding: var(--mainPadding);
+
+			background: var(--mainBg);
+			color: var(--mainColor);
+			border-width: 0px 0px 1px 0px;
+			border-color: var(--mainBC);
+
+			outline: none;
+		}
+	}
+}
+/* ===================================================== */
+
+
+/* --------------------- main block -------------------- */
+.main {
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	width: 100%;
+	height: calc(var(--popupHeight) - (var(--subElHeight) * 2));
+
+	padding: var(--mainPadding);
+
+	font: var(--contentFont);
+	background: var(--contentBg);
+	color: var(--contentColor);
+}
+/* ===================================================== */
+
+
+/* -------------------- footer block ------------------- */
+.footer {
+	width: 100%;
+	height: var(--subElHeight);
+
+	background: var(--mainBg);
+
+	text-align: center;
+
+	& .sync {
+		position: relative;
+		display: inline-block;
+
+		width: var(--subElHeight);
+		height: var(--subElHeight);
+
+		vertical-align: top;
+	}
+
+	& .info {
+		display: inline-block;
+		overflow: hidden;
+
+		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
+		height: var(--subElHeight);
+
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: top;
+
+		margin-left: -.3rem;
+		margin-right: -.3rem;
+		padding-left: .4rem;
+		padding-right: .4rem;
+	}
+
+	& .showset {
+		position: relative;
+		display: inline-block;
+
+		width: var(--subElHeight);
+		height: var(--subElHeight);
+
+		vertical-align: top;
+	}
+}
+/* ===================================================== */
+
+
+/* ------------------- settings block ------------------ */
+.settings {
+	position: absolute;
+	display: none;
+
+	width: calc(var(--popupWidth) - var(--subElHeight));
+	height: var(--popupHeight);
+
+	left: var(--popupWidth);
+}
+/* ===================================================== */

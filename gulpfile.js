@@ -3,13 +3,15 @@ gulpIf = require("gulp-if"),
 argv = require('yargs').argv,
 rename = require("gulp-rename"),
 newer = require("gulp-newer"),
+
 postCss = require("gulp-postcss"),
 cssNext = require("postcss-cssnext"),
 cssMin = require("gulp-cssmin"),
 htmlMin = require("gulp-htmlmin"),
 jsonMin = require("gulp-jsonmin"),
 imgMin = require("gulp-imagemin"),
-jsMin = require("gulp-uglify"),
+jsMin = require("gulp-jsmin"),
+
 
 rootDir = ".",
 sourceDir = rootDir + "/dev/",
@@ -20,13 +22,10 @@ processors = [
 	require("postcss-foreach"),
 	cssNext({
 		"nesting": true,
-		"calc": true,
-		"browsers": ["> 1%", "last 3 version"],
+		"browsers": ["Chrome >= 42"],
 		"autoprefixer": {
-			"browsers": ["> 1%, last 3 version"]
+			"browsers": ["Chrome >= 42"]
 		},
-		"customProperties": true,
-		"customSelectors": true,
 		"sourcemap": false
 	})
 ],
@@ -50,14 +49,14 @@ components = {
 };
 
 
-gulp.task("js", function() {
+gulp.task("js", () => {
 	gulp.src(components.js.src, {base: sourceDir})
 		.pipe(newer(destDir))
 		.pipe(gulpIf(argv.prod, jsMin()))
 		.pipe(gulp.dest(destDir));
 });
 
-gulp.task("css", function() {
+gulp.task("css", () => {
 	gulp.src(components.css.src, {base: sourceDir})
 		.pipe(newer(destDir))
 		.pipe(rename(path => path.extname = ".css"))
@@ -66,28 +65,28 @@ gulp.task("css", function() {
 		.pipe(gulp.dest(destDir));
 });
 
-gulp.task("html", function() {
+gulp.task("html", () => {
 	gulp.src(components.html.src, {base: sourceDir})
 		.pipe(newer(destDir))
 		.pipe(gulpIf(argv.prod, htmlMin({processScripts: "text/x-handlebars-template"})))
 		.pipe(gulp.dest(destDir));
 });
 
-gulp.task("json", function() {
+gulp.task("json", () => {
 	gulp.src(components.json.src, {base: sourceDir})
 		.pipe(newer(destDir))
 		.pipe(gulpIf(argv.prod, jsonMin()))
 		.pipe(gulp.dest(destDir));
 });
 
-gulp.task("img", function() {
+gulp.task("img", () => {
 	gulp.src(components.img.src, {base: sourceDir})
 		.pipe(newer(destDir))
 		.pipe(imgMin())
 		.pipe(gulp.dest(destDir));
 });
 
-gulp.task("watch", function() {
+gulp.task("watch", () => {
 	for(var source in components) {
 		if (components.hasOwnProperty(source)) {
 			gulp.watch(components[source].src, [source]);
@@ -95,6 +94,7 @@ gulp.task("watch", function() {
 	}
 });
 
-gulp.task("default", function() {
+
+gulp.task("default", () => {
 	gulp.start("js", "css", "html", "json", "img", "watch");
 });
