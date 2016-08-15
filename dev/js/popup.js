@@ -1,59 +1,134 @@
 "use strict";
 
 (function ($) {
-	// ------------------------------- Settings options ------------------------------- //
-	var storageOptions = {
-		area: chrome.storage.local,
-		default_options: {
-
-		}
-	};
-	// ================================================================================ //
-
-
 	// ----------------------------------- Main app ----------------------------------- //
+	chrome.storage.sync.tasks = [{
+		id: "1",
+		title: "First task",
+		complated: true,
+		order: 1,
+		url: ""
+	}];
+
 	let app = {
-		bg: chrome.extension.getBackgroundPage(),
+		lock: true,
 
 		// ------------------------ Logic for work with tasks ------------------------- //
 		Tasks: {
-			localStorage: chrome.storage.local,
-			remoteStorage: chrome.storage.sync,
+			items: chrome.storage.sync.tasks,
 
 			getAll: function() {
+				return this.items || [];
+			},
+			getBy: function(getBy, value) {
+				if (typeof value === "undefined" || value === null ||
+				["id", "title", "complated" ,"order", "url"].indexOf(getBy) === -1) {
+					return this.items || [];
+				} else {
+					let bufTasks = [];
+
+					$.each(this.items, function(i, task) {
+						if (typeof task[getBy] !== "undefined" && task[getBy] === value) {
+							bufTasks.push(task);
+						}
+					});
+
+					return bufTasks;
+				}
+			},
+
+			set: function(tasks) {
 
 			},
-			getById: function(id) {
+
+			add: function(tasks) {
 
 			},
-			getByUrl: function(url) {
+
+			deleteBy: function(deleteBy, value) {
 
 			},
-			getByOrder: function(order) {
+			delete: function(task) {
 
+			},
+
+			sort: function(tasks, sortBy) {
+				if (tasks.length) {
+					if (typeof tasks[0][sortBy] === "number") {
+						tasks.sort((task1, task2) => {
+							return task1[sortBy] - task2[sortBy];
+						});
+					} else {
+						tasks.sort();
+					}
+				}
+
+				return tasks;
+			},
+			toHtml: function(tasks) {
+				let tasksHtml = [], stateTask = "";
+
+				$.each(tasks, function(i, task) {
+					stateTask = (task.complated ? "completed" : "uncompleted");
+
+					tasksHtml.push([
+						"<li class='item'>",
+							"<img class='item__completed' src='../img/", stateTask, ".png' title='Task is ", stateTask, "'>",
+
+							"<a class='item__head' href='", task.url, "' target='_blank'>",
+								task.title,
+							"</a>",
+
+							//"<span class='item__id'>", task.id, "</span>",
+
+							"<div class='item__content'>",
+								task.content,
+							"</div>",
+						"</li>"
+					].join(""));
+				});
+
+				return tasksHtml.join("");
 			}
 		},
 		// ============================================================================ //
 
-		init: function(parent) {
+		init: function(parent, tasksContainer) {
 			let self = this;
 
 			$(parent).on("load", () => {
-				self.bg.setIcon("active.png");
+				self.setIcon("active");
 			});
 
-			$(parent).on("unload", () => {
-				self.bg.setIcon("default.png");
-			});
+			$(tasksContainer).empty().append(
+				self.Tasks.toHtml(
+					self.Tasks.sort(
+						self.Tasks.getAll(),
+						"order"
+					)
+				)
+			);
 
-			self.binds(parent);
+			self.binds(parent, tasksContainer, () => {
+				self.lock = false;
+			});
 		},
 
-		binds: function(parent) {
+		binds: function(parent, tasksContainer, callback) {
+			let self = this;
 
+
+
+			callback && callback();
+		},
+
+		setIcon: function(state) {
+			chrome.browserAction.setIcon({
+				"path": "../img/ext_icons/" + state + ".png"
+			});
 		}
 	};
 	// ================================================================================ //
 
-	app.init(window);
+	app.init(window, ".list");
 })(jQuery)

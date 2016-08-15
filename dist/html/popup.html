@@ -9,31 +9,31 @@
 	<body>
 		<div class="app">
 			<header class="header">
-				<a class="brand" href="https://github.com/pashakbit/todo_chrome_ext">
-					<img class="icon brand__logo" src="../img/logo.png">
+				<a class="brand" href="https://github.com/pashakbit/todo_chrome_ext" target="_blank" title="{{logoTitle}}">
+					<img class="icon brand__logo" src="../img/logo.png" alt="{{logoIconEmpty}}">
 				</a>
 
 				<div class="curtask" title="{{extDesc}}">{{extName}}</div>
 
 				<div class="search">
-					<input class="search__text" type="search">
-					<img class="icon search__icon" src="../img/search.png">
+					<input class="search__text" type="search" maxlength="40" placeholder="{{searchPlaceholder}}">
+					<img class="icon search__icon" src="../img/search.png" title="{{searchTitle}}" alt="{{searchIconEmpty}}">
 				</div>
 			</header>
 
 			<main class="main">
-				<ul class="tasklist"></ul>
+				<ul class="list"></ul>
 			</main>
 
 			<footer class="footer">
 				<div class="sync">
-					<img class="icon sync__icon" src="../img/sync.png">
+					<img class="icon sync__icon" src="../img/sync.png" title="{{syncTitle}}" alt="{{syncIconEmpty}}">
 				</div>
 
 				<div class="info">{{extInfo}}</div>
 
 				<div class="showset">
-					<img class="icon showset__icon" src="../img/showset.png">
+					<img class="icon showset__icon" src="../img/showset.png" title="{{showsetTitle}}" alt="{{showsetIconEmpty}}">
 				</div>
 			</footer>
 
@@ -44,13 +44,14 @@
 
 				<div class="settings__footer">
 					<div class="hideset">
-						<img class="icon hideset__icon" src="../img/arrow.png">
+						<img class="icon hideset__icon" src="../img/arrow.png" title="{{hidesetTitle}}" alt="{{hidesetIconEmpty}}">
 					</div>
 				</div>
 			</aside>
 		</div>
 
 		<script src="../js/lib/jquery.min.js"></script>
+		<script src="../js/options.js"></script>
 		<script src="../js/popup.js"></script>
 		<script src="../js/helpers/localizer.js"></script>
 		<script src="../js/helpers/quick_options.js"></script>

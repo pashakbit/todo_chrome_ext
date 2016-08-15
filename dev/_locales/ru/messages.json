@@ -1,14 +1,50 @@
 {
+	"lang": {
+		"message": "ru"
+	},
 	"extName": {
 		"message": "Todo Light"
 	},
 	"extDesc": {
-		"message": "Короткое описание расширения"
+		"message": "Краткое описание расширения"
 	},
-	"lang": {
-		"message": "ru"
+	"extSettings": {
+		"message": "Настройки"
 	},
 	"extInfo": {
 		"message": "2016 Copyright, MIT License"
+	},
+	"logoTitle": {
+		"message": "Посетите проект на github"
+	},
+	"logoIconEmpty": {
+		"message": "лого"
+	},
+	"searchTitle": {
+		"message": "Поиск таски"
+	},
+	"searchPlaceholder": {
+		"message": "Поиск по названию и содержанию"
+	},
+	"searchIconEmpty": {
+		"message": "поиск"
+	},
+	"syncTitle": {
+		"message": "Синхронизация"
+	},
+	"syncIconEmpty": {
+		"message": "синх"
+	},
+	"showsetTitle": {
+		"message": "Настройки"
+	},
+	"showsetIconEmpty": {
+		"message": "настройки"
+	},
+	"hidesetTitle": {
+		"message": "Назад"
+	},
+	"hidesetIconEmpty": {
+		"message": "назад"
 	}
 }
