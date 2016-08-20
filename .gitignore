@@ -1,3 +1,4 @@
 additional/
 node_modules/
 *.log
+.bash_history

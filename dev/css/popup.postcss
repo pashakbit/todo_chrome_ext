@@ -11,20 +11,89 @@
 	--mainPadding: .8rem;
 	--mainBR: 2px;
 	--mainBC: #303f9f;
+	--mainShadowY: 2px;
+	--mainShadowBlur: 4px;
+	--mainShadowColor1: rgba(0, 0, 0, 0.12);
+	--mainShadowColor2: rgba(0, 0, 0, 0.24);
 
-	--headFont: 300 normal calc(var(--subElHeight) / 2.3)/var(--subElHeight) Arial Narrow;
-	--contentFont: 300 normal calc(var(--subElHeight) / 3)/calc(var(--subElHeight) / 1.5) Arial Narrow;
+	--headFont: 300 normal calc(var(--subElHeight) / 2.2)/var(--subElHeight) Arial Narrow;
+	--contentFont: 300 normal calc(var(--subElHeight) / 2.5)/calc(var(--subElHeight) / 1.7) Arial Narrow;
 	--contentBg: #e2e1e0;
 	--contentColor: #444;
 	--contentBC: #e2e1e0;
 
 	--itemBg: #fafbfc;
+	--itemShadow: 0 1px 2px var(--mainShadowColor1), 0 1px 2px var(--mainShadowColor2);
+	--itemShadowHover: 0 3px 4px var(--mainShadowColor1), 0 3px 4px var(--mainShadowColor2);
 	--subContentColor: #757575;
+
+	--scrollWidth: calc(var(--mainPadding) / 2);
+	--scrollBg: rgba(200, 200, 200, 0.25);
+	--scrollShadowColor: rgba(0, 0, 0, 0.15);
+}
+/* ===================================================== */
+
+
+/* ----------------------- mixins ---------------------- */
+@define-mixin inlineSpace {
+	margin-left: -.3rem;
+	margin-right: -.3rem;
+}
+@define-mixin textElipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+@define-mixin iconStyles {
+	display: inline-block;
+
+	width: 100%;
+	height: 100%;
+
+	cursor: pointer;
+}
+@define-mixin btnStyles {
+	display: inline-block;
+	overflow: hidden;
+
+	width: var(--subElHeight);
+	height: var(--subElHeight);
+
+	vertical-align: top;
+}
+@define-mixin headFootPadding {
+	padding-left: calc(var(--mainPadding) / 2);
+	padding-right: calc(var(--mainPadding) / 2);
+}
+@define-mixin headFootStyles {
+	position: absolute;
+	z-index: 5;
+
+	width: 100%;
+	height: var(--subElHeight);
+
+	left: 0;
+	right: 0;
+
+	background: var(--mainBg);
+
+	text-align: center;
 }
 /* ===================================================== */
 
 
 /* -------------------- basic style -------------------- */
+::-webkit-scrollbar {
+	width: var(--scrollWidth);
+}
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 calc(var(--scrollWidth) / 2) var(--scrollShadowColor);
+}
+::-webkit-scrollbar-thumb {
+	background: var(--scrollBg);
+	box-shadow: inset 0 0 calc(var(--scrollWidth) / 2) var(--scrollShadowColor);
+}
+
 html {
 	box-sizing: border-box;
 }
@@ -35,6 +104,7 @@ html, body {
 	padding: 0;
 	margin: 0;
 }
+
 .app {
 	position: relative;
 	overflow: hidden;
@@ -46,63 +116,41 @@ html, body {
 	background: var(--contentBg);
 	color: var(--mainColor);
 }
-.icon {
-	display: inline-block;
-
-	width: 100%;
-	height: 100%;
-
-	cursor: pointer;
-}
 /* ===================================================== */
 
 
 /* -------------------- header block ------------------- */
 .header {
-	width: 100%;
-	height: var(--subElHeight);
+	top: 0;
 
-	background: var(--mainBg);
+	box-shadow: 0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor1),
+				0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor2);
 
-	box-shadow: 0 3px 4px rgba(0, 0, 0, 0.12), 0 3px 4px rgba(0, 0, 0, 0.24);
-
-	text-align: center;
+	@mixin headFootStyles top;
 
 	& .brand {
-		display: inline-block;
-		overflow: hidden;
+		@mixin btnStyles;
 
-		width: var(--subElHeight);
-		height: var(--subElHeight);
-
-		vertical-align: top;
+		&__icon {
+			@mixin iconStyles;
+		}
 	}
 
 	& .curtask {
 		display: inline-block;
-		overflow: hidden;
 
 		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
 		height: var(--subElHeight);
 
-		text-overflow: ellipsis;
-		white-space: nowrap;
 		vertical-align: top;
 
-		margin-left: -.3rem;
-		margin-right: -.3rem;
-		padding-left: .4rem;
-		padding-right: .4rem;
+		@mixin textElipsis;
+		@mixin inlineSpace;
+		@mixin headFootPadding;
 	}
 
 	& .search {
-		position: relative;
-		display: inline-block;
-
-		width: var(--subElHeight);
-		height: var(--subElHeight);
-
-		vertical-align: top;
+		@mixin btnStyles;
 
 		&__text {
 			position: absolute;
@@ -125,6 +173,9 @@ html, body {
 
 			outline: none;
 		}
+		&__icon {
+			@mixin iconStyles;
+		}
 	}
 }
 /* ===================================================== */
@@ -132,17 +183,22 @@ html, body {
 
 /* --------------------- main block -------------------- */
 .main {
+	z-index: 3;
 	overflow-x: hidden;
 	overflow-y: auto;
 
 	width: 100%;
-	height: calc(var(--popupHeight) - (var(--subElHeight) * 2) - .8rem);
+	height: calc(var(--popupHeight) - (var(--subElHeight) * 2));
 
-	margin-top: .8rem;
-	padding: 0 var(--mainPadding);
+	margin: var(--subElHeight) 0;
+	padding: var(--mainPadding) var(--mainPadding) 0;
 
 	font: var(--contentFont);
 	color: var(--contentColor);
+
+	&__scroll {
+		padding-right: calc(var(--mainPadding) - var(--scrollWidth));
+	}
 }
 .list {
 	width: 100%;
@@ -164,23 +220,18 @@ html, body {
 		background: var(--itemBg);
 		list-style: none;
 
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		box-shadow: var(--itemShadow);
 
 		transition: box-shadow .1s linear;
 
 		&:hover {
-			box-shadow: 0 3px 5px rgba(0, 0, 0, 0.12), 0 3px 5px rgba(0, 0, 0, 0.24);
+			box-shadow: var(--itemShadowHover);
 		}
-
 		&__completed {
-			display: inline-block;
-
-			width: var(--subElHeight);
-			height: var(--subElHeight);
+			@mixin btnStyles;
 		}
 		&__head {
 			display: inline-block;
-			overflow: hidden;
 
 			width: calc(100% - var(--subElHeight));
 			height: var(--subElHeight);
@@ -188,14 +239,11 @@ html, body {
 			padding-left: var(--mainPadding);
 			padding-right: var(--mainPadding);
 
-			text-overflow: ellipsis;
-			white-space: nowrap;
-
-			color: var(--contentColor);
 			border-bottom: 1px solid var(--contentBC);
 
 			font: var(--headFont);
-			text-decoration: none;
+
+			@mixin textElipsis;
 		}
 		/* &__id {
 			position: absolute;
@@ -222,25 +270,20 @@ html, body {
 
 /* -------------------- footer block ------------------- */
 .footer {
-	width: 100%;
-	height: var(--subElHeight);
+	bottom: 0;
 
-	background: var(--mainBg);
+	box-shadow: 0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor1),
+				0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor2);
 
-	box-shadow: 0 -3px 4px rgba(0, 0, 0, 0.12), 0 -3px 4px rgba(0, 0, 0, 0.24);
-
-	text-align: center;
+	@mixin headFootStyles bottom;
 
 	& .sync {
-		position: relative;
-		display: inline-block;
+		@mixin btnStyles;
 
-		width: var(--subElHeight);
-		height: var(--subElHeight);
-
-		vertical-align: top;
+		&__icon {
+			@mixin iconStyles;
+		}
 	}
-
 	& .info {
 		display: inline-block;
 		overflow: hidden;
@@ -248,24 +291,16 @@ html, body {
 		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
 		height: var(--subElHeight);
 
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		vertical-align: top;
-
-		margin-left: -.3rem;
-		margin-right: -.3rem;
-		padding-left: .4rem;
-		padding-right: .4rem;
+		@mixin textElipsis;
+		@mixin inlineSpace;
+		@mixin headFootPadding;
 	}
-
 	& .showset {
-		position: relative;
-		display: inline-block;
+		@mixin btnStyles;
 
-		width: var(--subElHeight);
-		height: var(--subElHeight);
-
-		vertical-align: top;
+		&__icon {
+			@mixin iconStyles;
+		}
 	}
 }
 /* ===================================================== */
@@ -280,5 +315,11 @@ html, body {
 	height: var(--popupHeight);
 
 	left: var(--popupWidth);
+
+	& .hideset {
+		&__icon {
+			@mixin iconStyles;
+		}
+	}
 }
 /* ===================================================== */

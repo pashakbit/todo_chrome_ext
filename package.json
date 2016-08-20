@@ -30,6 +30,7 @@
     "postcss-cssnext": "^2.7.0",
     "postcss-for": "^2.1.1",
     "postcss-foreach": "0.0.3",
+    "postcss-mixins": "^5.0.1",
     "yargs": "^4.8.1"
   },
   "author": "Kokovin @PashaK Pavel <kokovinpavel@yandex.ru>",

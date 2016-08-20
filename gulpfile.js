@@ -27,7 +27,8 @@ processors = [
 			"browsers": ["Chrome >= 42"]
 		},
 		"sourcemap": false
-	})
+	}),
+	require("postcss-mixins")
 ],
 
 components = {
@@ -93,7 +94,6 @@ gulp.task("watch", () => {
 		}
 	}
 });
-
 
 gulp.task("default", () => {
 	gulp.start("js", "css", "html", "json", "img", "watch");

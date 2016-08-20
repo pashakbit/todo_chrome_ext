@@ -7,7 +7,40 @@
 		title: "First task",
 		complated: true,
 		order: 1,
-		url: ""
+		url: "",
+		content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?"
+	},
+	{
+		id: "2",
+		title: "Smoll",
+		complated: false,
+		order: 2,
+		url: "",
+		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+	},
+	{
+		id: "3",
+		title: "It's task have medium head size",
+		complated: true,
+		order: 3,
+		url: "",
+		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+	},
+	{
+		id: "4",
+		title: "It's task have Large head size for testing UI on my browser",
+		complated: false,
+		order: 4,
+		url: "",
+		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+	},
+	{
+		id: "5",
+		title: "Task with many space                                         ",
+		complated: true,
+		order: 5,
+		url: "",
+		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
 	}];
 
 	let app = {
@@ -73,11 +106,11 @@
 
 					tasksHtml.push([
 						"<li class='item'>",
-							"<img class='item__completed' src='../img/", stateTask, ".png' title='Task is ", stateTask, "'>",
+							"<img class='item__completed' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
 
-							"<a class='item__head' href='", task.url, "' target='_blank'>",
+							"<span class='item__head' href='", task.url, "' title='", task.title, "' target='_blank'>",
 								task.title,
-							"</a>",
+							"</span>",
 
 							//"<span class='item__id'>", task.id, "</span>",
 
@@ -109,6 +142,8 @@
 				)
 			);
 
+			self.setWidthСonsiderScroll(tasksContainer);
+
 			self.binds(parent, tasksContainer, () => {
 				self.lock = false;
 			});
@@ -120,6 +155,22 @@
 
 
 			callback && callback();
+		},
+
+		setWidthСonsiderScroll: function(block) {
+			let main = $(".main"),
+				list = $(block),
+				appHeight = $(".app").css("height").replace(/[a-z]/gi, ""),
+				headerHeight = $(".header").css("height").replace(/[a-z]/gi, ""),
+				maxHeight = appHeight - 2 * headerHeight;
+
+			console.log(list.height(), maxHeight);
+
+			if (list.height() > maxHeight) {
+				main.addClass("main__scroll");
+			} else {
+				main.removeClass("main__scroll");
+			}
 		},
 
 		setIcon: function(state) {

@@ -47,9 +47,9 @@ chrome.runtime.onUpdateAvailable.addListener((details) => {
 
 
 chrome.windows.onFocusChanged.addListener((id) => {
-	let state = (id !== -1 ? "default" : "active");
-
-	chrome.browserAction.setIcon({
-		"path": "../img/ext_icons/" + state + ".png"
-	});
+	if (id !== -1) {
+		chrome.browserAction.setIcon({
+			"path": "../img/ext_icons/default.png"
+		});
+	}
 });
