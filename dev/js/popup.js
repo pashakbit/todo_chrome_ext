@@ -5,7 +5,7 @@
 	chrome.storage.sync.tasks = [{
 		id: "1",
 		title: "First task",
-		complated: true,
+		completed: true,
 		order: 1,
 		url: "",
 		content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?"
@@ -13,7 +13,7 @@
 	{
 		id: "2",
 		title: "Smoll",
-		complated: false,
+		completed: false,
 		order: 2,
 		url: "",
 		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
@@ -21,7 +21,7 @@
 	{
 		id: "3",
 		title: "It's task have medium head size",
-		complated: true,
+		completed: true,
 		order: 3,
 		url: "",
 		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
@@ -29,7 +29,7 @@
 	{
 		id: "4",
 		title: "It's task have Large head size for testing UI on my browser",
-		complated: false,
+		completed: false,
 		order: 4,
 		url: "",
 		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
@@ -37,25 +37,26 @@
 	{
 		id: "5",
 		title: "Task with many space                                         ",
-		complated: true,
+		completed: true,
 		order: 5,
 		url: "",
 		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
 	}];
 
 	let app = {
-		lock: true,
+		lock: true,									// Lock UI while app load or/and render
 
 		// ------------------------ Logic for work with tasks ------------------------- //
 		Tasks: {
+			serverContentInTitle: true,				// I hope, that this is stopgap only
+			itemsVars: ["id", "title", "completed" ,"order", "url", "content"],
 			items: chrome.storage.sync.tasks,
 
 			getAll: function() {
 				return this.items || [];
 			},
 			getBy: function(getBy, value) {
-				if (typeof value === "undefined" || value === null ||
-				["id", "title", "complated" ,"order", "url"].indexOf(getBy) === -1) {
+				if (typeof value === "undefined" || value === null || itemsVars.indexOf(getBy) === -1) {
 					return this.items || [];
 				} else {
 					let bufTasks = [];
@@ -102,7 +103,7 @@
 				let tasksHtml = [], stateTask = "";
 
 				$.each(tasks, function(i, task) {
-					stateTask = (task.complated ? "completed" : "uncompleted");
+					stateTask = (task.completed ? "completed" : "uncompleted");
 
 					tasksHtml.push([
 						"<li class='item'>",
@@ -122,6 +123,18 @@
 				});
 
 				return tasksHtml.join("");
+			},
+			getState: function() {
+				let state = "active";
+
+				$.each(this.getAll(), function(i, task) {
+					if (task.completed === false) {
+						state = "uncomplete";
+						return false;
+					}
+				});
+
+				return state;
 			}
 		},
 		// ============================================================================ //
@@ -152,19 +165,79 @@
 		binds: function(parent, tasksContainer, callback) {
 			let self = this;
 
+			// ------------------------------ lock block ------------------------------ //
+			let lockList = ".brand, .search__icon, .sync__icon, .showset__icon, .hideset__icon, .overlay";
 
+			$(parent).on("click", lockList, (e) => {
+				if (self.lock) {					// If the UI is locked
+					e.stopImmediatePropagation();	// stop the event
+					return false;					// or stop open link
+				}
+			});
+			// ======================================================================== //
+
+			// ----------------------------- search block ----------------------------- //
+			let searchText = $(parent).find(".search__text"),
+			searchClassActive = "search__text-active";
+
+			$(parent).on("click", ".search__icon", () => {
+				if (searchText.hasClass(searchClassActive)) {
+					searchText.removeClass(searchClassActive);
+					$(parent).focus();
+				} else {
+					searchText.addClass(searchClassActive).focus();
+				}
+			});
+			// ======================================================================== //
+
+			// ---------------------------- settings block ---------------------------- //
+			let settings = $(parent).find(".settings"),
+			overlay = $(parent).find(".overlay"),
+			removeWillTimeoutID = -1;
+
+			$(parent).on("mouseenter", ".showset__icon, .hideset__icon, .overlay", () => {
+				clearTimeout(removeWillTimeoutID);
+				settings.addClass("will-transform");
+			});
+			$(parent).on("mouseleave", ".showset__icon, .hideset__icon, .overlay", () => {
+				removeWillTimeoutID = setTimeout(() => {
+					settings.removeClass("will-transform");
+				}, 800);
+			});
+
+			$(parent).on("click", ".showset__icon", () => {
+				self.lock = true;
+
+				settings.addClass("settings__active");
+				overlay.addClass("overlay__block").addClass("overlay__active");
+			});
+			$(parent).on("click", ".hideset__icon, .overlay", () => {
+				self.lock = true;
+
+				settings.removeClass("settings__active");
+				overlay.removeClass("overlay__active");
+			});
+
+			$(parent).on("transitionend", ".settings", () => {
+				clearTimeout(removeWillTimeoutID);
+				settings.removeClass("will-transform");
+
+				if (!overlay.hasClass("overlay__active")) {
+					overlay.removeClass("overlay__block");
+				}
+
+				self.lock = false;
+			});
+			// ======================================================================== //
 
 			callback && callback();
 		},
 
 		setWidthСonsiderScroll: function(block) {
-			let main = $(".main"),
-				list = $(block),
-				appHeight = $(".app").css("height").replace(/[a-z]/gi, ""),
-				headerHeight = $(".header").css("height").replace(/[a-z]/gi, ""),
-				maxHeight = appHeight - 2 * headerHeight;
-
-			console.log(list.height(), maxHeight);
+			let main = $(".main"), list = $(block),
+			appHeight = $(".app").height(),
+			headerHeight = $(".header").height(),
+			maxHeight = appHeight - 2 * headerHeight;
 
 			if (list.height() > maxHeight) {
 				main.addClass("main__scroll");
@@ -181,5 +254,5 @@
 	};
 	// ================================================================================ //
 
-	app.init(window, ".list");
+	app.init(document, ".list");					// Or return app, if we use autoloader
 })(jQuery)
