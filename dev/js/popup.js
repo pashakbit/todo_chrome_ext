@@ -1,6 +1,6 @@
 "use strict";
 
-(function ($) {
+(($) => {
 	// ----------------------------------- Main app ----------------------------------- //
 	chrome.storage.sync.tasks = [{
 		id: "1",
@@ -52,16 +52,16 @@
 			itemsVars: ["id", "title", "completed" ,"order", "url", "content"],
 			items: chrome.storage.sync.tasks,
 
-			getAll: function() {
+			getAll: () => {
 				return this.items || [];
 			},
-			getBy: function(getBy, value) {
+			getBy: (getBy, value) => {
 				if (typeof value === "undefined" || value === null || itemsVars.indexOf(getBy) === -1) {
 					return this.items || [];
 				} else {
 					let bufTasks = [];
 
-					$.each(this.items, function(i, task) {
+					$.each(this.items, (i, task) => {
 						if (typeof task[getBy] !== "undefined" && task[getBy] === value) {
 							bufTasks.push(task);
 						}
@@ -71,22 +71,22 @@
 				}
 			},
 
-			set: function(tasks) {
+			set: (tasks) => {
 
 			},
 
-			add: function(tasks) {
+			add: (tasks) => {
 
 			},
 
-			deleteBy: function(deleteBy, value) {
+			deleteBy: (deleteBy, value) => {
 
 			},
-			delete: function(task) {
+			delete: (task) => {
 
 			},
 
-			sort: function(tasks, sortBy) {
+			sort: (tasks, sortBy) => {
 				if (tasks.length) {
 					if (typeof tasks[0][sortBy] === "number") {
 						tasks.sort((task1, task2) => {
@@ -99,10 +99,10 @@
 
 				return tasks;
 			},
-			toHtml: function(tasks) {
+			toHtml: (tasks) => {
 				let tasksHtml = [], stateTask = "";
 
-				$.each(tasks, function(i, task) {
+				$.each(tasks, (i, task) => {
 					stateTask = (task.completed ? "completed" : "uncompleted");
 
 					tasksHtml.push([
@@ -124,10 +124,10 @@
 
 				return tasksHtml.join("");
 			},
-			getState: function() {
+			getState: () => {
 				let state = "active";
 
-				$.each(this.getAll(), function(i, task) {
+				$.each(this.getAll(), (i, task) => {
 					if (task.completed === false) {
 						state = "uncomplete";
 						return false;
@@ -139,7 +139,7 @@
 		},
 		// ============================================================================ //
 
-		init: function(parent, tasksContainer) {
+		init: (parent, tasksContainer) => {
 			let self = this;
 
 			$(parent).on("load", () => {
@@ -162,7 +162,7 @@
 			});
 		},
 
-		binds: function(parent, tasksContainer, callback) {
+		binds: (parent, tasksContainer, callback) => {
 			let self = this;
 
 			// ------------------------------ lock block ------------------------------ //
@@ -233,11 +233,12 @@
 			callback && callback();
 		},
 
-		setWidthСonsiderScroll: function(block) {
+		setWidthСonsiderScroll: (block) => {
 			let main = $(".main"), list = $(block),
 			appHeight = $(".app").height(),
 			headerHeight = $(".header").height(),
-			maxHeight = appHeight - 2 * headerHeight;
+			footerHeight = $(".footer").height(),
+			maxHeight = appHeight - headerHeight - footerHeight;
 
 			if (list.height() > maxHeight) {
 				main.addClass("main__scroll");
@@ -246,7 +247,7 @@
 			}
 		},
 
-		setIcon: function(state) {
+		setIcon: (state) => {
 			chrome.browserAction.setIcon({
 				"path": "../img/ext_icons/" + state + ".png"
 			});
