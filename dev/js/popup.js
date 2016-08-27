@@ -49,19 +49,19 @@
 		// ------------------------ Logic for work with tasks ------------------------- //
 		Tasks: {
 			serverContentInTitle: true,				// I hope, that this is stopgap only
-			itemsVars: ["id", "title", "completed" ,"order", "url", "content"],
+			itemVars: ["id", "title", "completed" ,"order", "url", "content"],
 			items: chrome.storage.sync.tasks,
 
 			getAll: () => {
-				return this.items || [];
+				return app.Tasks.items || [];
 			},
 			getBy: (getBy, value) => {
-				if (typeof value === "undefined" || value === null || itemsVars.indexOf(getBy) === -1) {
-					return this.items || [];
+				if (typeof value === "undefined" || value === null || itemVars.indexOf(getBy) === -1) {
+					return app.Tasks.items || [];
 				} else {
 					let bufTasks = [];
 
-					$.each(this.items, (i, task) => {
+					$.each(app.Tasks.items, (i, task) => {
 						if (typeof task[getBy] !== "undefined" && task[getBy] === value) {
 							bufTasks.push(task);
 						}
@@ -127,7 +127,7 @@
 			getState: () => {
 				let state = "active";
 
-				$.each(this.getAll(), (i, task) => {
+				$.each(app.Tasks.getAll(), (i, task) => {
 					if (task.completed === false) {
 						state = "uncomplete";
 						return false;
@@ -140,36 +140,32 @@
 		// ============================================================================ //
 
 		init: (parent, tasksContainer) => {
-			let self = this;
-
 			$(parent).on("load", () => {
-				self.setIcon("active");
+				app.setIcon("active");
 			});
 
 			$(tasksContainer).empty().append(
-				self.Tasks.toHtml(
-					self.Tasks.sort(
-						self.Tasks.getAll(),
+				app.Tasks.toHtml(
+					app.Tasks.sort(
+						app.Tasks.getAll(),
 						"order"
 					)
 				)
 			);
 
-			self.setWidthСonsiderScroll(tasksContainer);
+			app.setWidthСonsiderScroll(tasksContainer);
 
-			self.binds(parent, tasksContainer, () => {
-				self.lock = false;
+			app.binds(parent, tasksContainer, () => {
+				app.lock = false;
 			});
 		},
 
 		binds: (parent, tasksContainer, callback) => {
-			let self = this;
-
 			// ------------------------------ lock block ------------------------------ //
 			let lockList = ".brand, .search__icon, .sync__icon, .showset__icon, .hideset__icon, .overlay";
 
 			$(parent).on("click", lockList, (e) => {
-				if (self.lock) {					// If the UI is locked
+				if (app.lock) {					// If the UI is locked
 					e.stopImmediatePropagation();	// stop the event
 					return false;					// or stop open link
 				}
@@ -178,7 +174,7 @@
 
 			// ----------------------------- search block ----------------------------- //
 			let searchText = $(parent).find(".search__text"),
-			searchClassActive = "search__text-active";
+				searchClassActive = "search__text-active";
 
 			$(parent).on("click", ".search__icon", () => {
 				if (searchText.hasClass(searchClassActive)) {
@@ -192,11 +188,12 @@
 
 			// ---------------------------- settings block ---------------------------- //
 			let settings = $(parent).find(".settings"),
-			overlay = $(parent).find(".overlay"),
-			removeWillTimeoutID = -1;
+				overlay = $(parent).find(".overlay"),
+				removeWillTimeoutID = null;
 
 			$(parent).on("mouseenter", ".showset__icon, .hideset__icon, .overlay", () => {
 				clearTimeout(removeWillTimeoutID);
+				removeWillTimeoutID = null;
 				settings.addClass("will-transform");
 			});
 			$(parent).on("mouseleave", ".showset__icon, .hideset__icon, .overlay", () => {
@@ -206,27 +203,27 @@
 			});
 
 			$(parent).on("click", ".showset__icon", () => {
-				self.lock = true;
+				app.lock = true;
 
-				settings.addClass("settings__active");
-				overlay.addClass("overlay__block").addClass("overlay__active");
+				settings.addClass("settings-active");
+				overlay.addClass("overlay-block").addClass("overlay-active");
 			});
 			$(parent).on("click", ".hideset__icon, .overlay", () => {
-				self.lock = true;
+				app.lock = true;
 
-				settings.removeClass("settings__active");
-				overlay.removeClass("overlay__active");
+				settings.removeClass("settings-active");
+				overlay.removeClass("overlay-active");
 			});
 
 			$(parent).on("transitionend", ".settings", () => {
 				clearTimeout(removeWillTimeoutID);
 				settings.removeClass("will-transform");
 
-				if (!overlay.hasClass("overlay__active")) {
-					overlay.removeClass("overlay__block");
+				if (!overlay.hasClass("overlay-active")) {
+					overlay.removeClass("overlay-block");
 				}
 
-				self.lock = false;
+				app.lock = false;
 			});
 			// ======================================================================== //
 
@@ -235,15 +232,15 @@
 
 		setWidthСonsiderScroll: (block) => {
 			let main = $(".main"), list = $(block),
-			appHeight = $(".app").height(),
-			headerHeight = $(".header").height(),
-			footerHeight = $(".footer").height(),
-			maxHeight = appHeight - headerHeight - footerHeight;
+				appHeight = $(".app").height(),
+				headerHeight = $(".header").height(),
+				footerHeight = $(".footer").height(),
+				maxHeight = appHeight - headerHeight - footerHeight;
 
 			if (list.height() > maxHeight) {
-				main.addClass("main__scroll");
+				main.addClass("main-scroll");
 			} else {
-				main.removeClass("main__scroll");
+				main.removeClass("main-scroll");
 			}
 		},
 

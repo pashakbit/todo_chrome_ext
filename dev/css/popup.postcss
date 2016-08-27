@@ -7,10 +7,11 @@
 
 	--mainFont: 300 normal calc(var(--subElHeight) / 2)/var(--subElHeight) Arial Narrow;
 	--mainBg: #3f51b5;
+	--mainBgHover: #2326a1;
 	--mainColor: #fff;
 	--mainPadding: .8rem;
 	--mainBR: 2px;
-	--mainBC: #45e;
+	--mainBC: #2326a1;
 	--mainShadowY: 2px;
 	--mainShadowBlur: 4px;
 	--mainShadowColor1: rgba(0, 0, 0, .12);
@@ -29,7 +30,10 @@
 	--itemShadowHover: 0 3px 4px var(--mainShadowColor1), 0 3px 4px var(--mainShadowColor2);
 	--itemSubContentColor: #757575;
 
-	--settingsBg: #e2e1e0;
+	--settingsWidth: calc(var(--popupWidth) - var(--subElHeight));
+	--settingsBg: #fafbfc;
+	--settingsBgHover: #ccc;
+	--settingsColor: #444;
 	--settingsOverlayBg: rgba(0, 0, 0, 0);
 	--settingsOverlayBgActive: rgba(0, 0, 0, .7);
 
@@ -66,6 +70,13 @@
 	height: var(--subElHeight);
 
 	vertical-align: top;
+	transition: background var(--mainAnimDuration) var(--mainAnimType);
+}
+@define-mixin btnStylesHover {
+	background: var(--mainBgHover);
+}
+@define-mixin settingsBtnStylesHover {
+	background: var(--settingsBgHover);
 }
 @define-mixin headFootPadding {
 	padding-left: calc(var(--mainPadding) / 2);
@@ -81,9 +92,42 @@
 	left: 0;
 	right: 0;
 
-	background: var(--mainBg);
-
 	text-align: center;
+}
+@define-mixin mainHeadFootStyles {
+	@mixin headFootStyles;
+
+	background: var(--mainBg);
+}
+@define-mixin settingsHeadFootStyles {
+	@mixin headFootStyles;
+
+	background: var(--settingsBg);
+}
+@define-mixin headers {
+	top: 0;
+
+	box-shadow: 0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor1),
+				0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor2);
+}
+@define-mixin footers {
+	bottom: 0;
+
+	box-shadow: 0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor1),
+				0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor2);
+}
+@define-mixin infoText {
+	display: inline-block;
+	overflow: hidden;
+
+	width: calc(100% - (var(--subElHeight) * 2));
+	height: var(--subElHeight);
+
+	vertical-align: top;
+
+	@mixin textElipsis;
+	@mixin inlineSpace;
+	@mixin headFootPadding;
 }
 /* ===================================================== */
 
@@ -131,15 +175,15 @@ html, body {
 
 /* -------------------- header block ------------------- */
 .header {
-	top: 0;
-
-	box-shadow: 0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor1),
-				0 var(--mainShadowY) var(--mainShadowBlur) var(--mainShadowColor2);
-
-	@mixin headFootStyles top;
+	@mixin headers;
+	@mixin mainHeadFootStyles top;
 
 	& .brand {
 		@mixin btnStyles;
+
+		&:hover {
+			@mixin btnStylesHover
+		}
 
 		&__icon {
 			@mixin iconStyles;
@@ -147,21 +191,19 @@ html, body {
 	}
 
 	& .curtask {
-		display: inline-block;
-
-		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
-		height: var(--subElHeight);
-
-		vertical-align: top;
-
-		@mixin textElipsis;
-		@mixin inlineSpace;
-		@mixin headFootPadding;
+		@mixin infoText;
 	}
 
 	& .search {
 		@mixin btnStyles;
 
+		&:hover {
+			@mixin btnStylesHover
+		}
+
+		&__icon {
+			@mixin iconStyles;
+		}
 		&__text {
 			position: absolute;
 			display: none;
@@ -188,9 +230,6 @@ html, body {
 				display: block;
 			}
 		}
-		&__icon {
-			@mixin iconStyles;
-		}
 	}
 }
 /* ===================================================== */
@@ -211,7 +250,7 @@ html, body {
 	font: var(--contentFont);
 	color: var(--contentColor);
 
-	&__scroll {
+	&-scroll {
 		padding-right: calc(var(--mainPadding) - var(--scrollWidth));
 	}
 }
@@ -242,8 +281,13 @@ html, body {
 		&:hover {
 			box-shadow: var(--itemShadowHover);
 		}
+
 		&__completed {
 			@mixin btnStyles;
+
+			&:hover {
+				@mixin btnStylesHover
+			}
 		}
 		&__head {
 			display: inline-block;
@@ -285,33 +329,29 @@ html, body {
 
 /* -------------------- footer block ------------------- */
 .footer {
-	bottom: 0;
-
-	box-shadow: 0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor1),
-				0 calc(0 - var(--mainShadowY)) var(--mainShadowBlur) var(--mainShadowColor2);
-
-	@mixin headFootStyles bottom;
+	@mixin footers;
+	@mixin mainHeadFootStyles bottom;
 
 	& .sync {
 		@mixin btnStyles;
+
+		&:hover {
+			@mixin btnStylesHover
+		}
 
 		&__icon {
 			@mixin iconStyles;
 		}
 	}
 	& .info {
-		display: inline-block;
-		overflow: hidden;
-
-		width: calc(var(--popupWidth) - (var(--subElHeight) * 2));
-		height: var(--subElHeight);
-
-		@mixin textElipsis;
-		@mixin inlineSpace;
-		@mixin headFootPadding;
+		@mixin infoText;
 	}
 	& .showset {
 		@mixin btnStyles;
+
+		&:hover {
+			@mixin btnStylesHover
+		}
 
 		&__icon {
 			@mixin iconStyles;
@@ -326,21 +366,53 @@ html, body {
 	position: absolute;
 	z-index: 9;
 
-	width: calc(var(--popupWidth) - (var(--subElHeight) * 1.5));
+	width: var(--settingsWidth);
 	height: var(--popupHeight);
 
 	top: 0;
 	left: var(--popupWidth);
 
 	background: var(--settingsBg);
+	color: var(--settingsColor);
 
 	transition: transform var(--mainAnimDuration) var(--mainAnimType);
 
-	&__active {
-		transform: translateX(calc(-var(--popupWidth) + (var(--subElHeight) * 1.5)));
+	&-active {
+		transform: translateX(-var(--settingsWidth));
 	}
 
+	&__header {
+		@mixin headers;
+		@mixin settingsHeadFootStyles;
+	}
+	&__body {
+
+	}
+	&__footer {
+		@mixin footers;
+		@mixin settingsHeadFootStyles;
+	}
+	& .save {
+		@mixin btnStyles;
+
+		&:hover {
+			@mixin settingsBtnStylesHover
+		}
+
+		&__icon {
+			@mixin iconStyles;
+		}
+	}
+	& .info {
+		@mixin infoText;
+	}
 	& .hideset {
+		@mixin btnStyles;
+
+		&:hover {
+			@mixin settingsBtnStylesHover
+		}
+
 		&__icon {
 			@mixin iconStyles;
 		}
@@ -364,10 +436,10 @@ html, body {
 
 	transition: background var(--mainAnimDuration) var(--mainAnimType);
 
-	&__block {
+	&-block {
 		display: block;
 	}
-	&__active {
+	&-active {
 		background: var(--settingsOverlayBgActive);
 	}
 }

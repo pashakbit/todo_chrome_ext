@@ -16,7 +16,7 @@
 				<div class="curtask" title="{{extDesc}}">{{extName}}</div>
 
 				<div class="search">
-					<input class="search__text" type="search" maxlength="40" placeholder="{{searchPlaceholder}}">
+					<input class="search__text" type="text" maxlength="64" placeholder="{{searchPlaceholder}}">
 					<img class="search__icon" src="../img/search.png" title="{{searchTitle}}" alt="{{searchIconEmpty}}">
 				</div>
 			</header>
@@ -38,11 +38,17 @@
 			</footer>
 
 			<aside class="settings">
-				<h2 class="settungs__head">{{extSettings}}</h2>
+				<div class="settings__header">{{extSettings}}</div>
 
-				<div class="settings__options"></div>
+				<div class="settings__body"></div>
 
 				<div class="settings__footer">
+					<div class="save">
+						<img class="save__icon" src="../img/save.png" title="{{saveTitle}}" alt="{{saveIconEmpty}}">
+					</div>
+
+					<div class="info">{{extInfo}}</div>
+
 					<div class="hideset">
 						<img class="hideset__icon" src="../img/arrow.png" title="{{hidesetTitle}}" alt="{{hidesetIconEmpty}}">
 					</div>
