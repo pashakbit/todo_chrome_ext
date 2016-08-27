@@ -1,53 +1,53 @@
 var gulp = require("gulp"),
-gulpIf = require("gulp-if"),
-argv = require('yargs').argv,
-rename = require("gulp-rename"),
-newer = require("gulp-newer"),
+	gulpIf = require("gulp-if"),
+	argv = require('yargs').argv,
+	rename = require("gulp-rename"),
+	newer = require("gulp-newer"),
 
-postCss = require("gulp-postcss"),
-cssNext = require("postcss-cssnext"),
-cssMin = require("gulp-cssmin"),
-htmlMin = require("gulp-htmlmin"),
-jsonMin = require("gulp-jsonmin"),
-imgMin = require("gulp-imagemin"),
-jsMin = require("gulp-jsmin"),
+	postCss = require("gulp-postcss"),
+	cssNext = require("postcss-cssnext"),
+	cssMin = require("gulp-cssmin"),
+	htmlMin = require("gulp-htmlmin"),
+	jsonMin = require("gulp-jsonmin"),
+	imgMin = require("gulp-imagemin"),
+	jsMin = require("gulp-jsmin"),
 
 
-rootDir = ".",
-sourceDir = rootDir + "/dev/",
-destDir = rootDir + "/dist/",
+	rootDir = ".",
+	sourceDir = rootDir + "/dev/",
+	destDir = rootDir + "/dist/",
 
-processors = [
-	require("postcss-for"),
-	require("postcss-foreach"),
-	cssNext({
-		"nesting": true,
-		"browsers": ["Chrome >= 42"],
-		"autoprefixer": {
-			"browsers": ["Chrome >= 42"]
+	processors = [
+		require("postcss-for"),
+		require("postcss-foreach"),
+		cssNext({
+			"nesting": true,
+			"browsers": ["Chrome >= 42"],
+			"autoprefixer": {
+				"browsers": ["Chrome >= 42"]
+			},
+			"sourcemap": false
+		}),
+		require("postcss-mixins")
+	],
+
+	components = {
+		js: {
+			src: sourceDir + "js/**/*.js"
 		},
-		"sourcemap": false
-	}),
-	require("postcss-mixins")
-],
-
-components = {
-	js: {
-		src: sourceDir + "js/**/*.js"
-	},
-	css: {
-		src: sourceDir + "css/**/*.postcss"
-	},
-	html: {
-		src: sourceDir + "html/**/*.html"
-	},
-	json: {
-		src: sourceDir + "**/*.json"
-	},
-	img: {
-		src: sourceDir + "img/**/*.+(jpg|jpeg|png|gif)"
-	}
-};
+		css: {
+			src: sourceDir + "css/**/*.postcss"
+		},
+		html: {
+			src: sourceDir + "html/**/*.html"
+		},
+		json: {
+			src: sourceDir + "**/*.json"
+		},
+		img: {
+			src: sourceDir + "img/**/*.+(jpg|jpeg|png|gif)"
+		}
+	};
 
 
 gulp.task("js", () => {

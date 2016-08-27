@@ -3,7 +3,9 @@
 chrome.runtime.onInstalled.addListener((details) => {
 	function setDefaults(callback) {
 		storageOptions.area.get((stored_options) => {
-			let default_options = storageOptions.default_options, option, new_options = {};
+			let default_options = storageOptions.default_options,
+				option,
+				new_options = {};
 
 			for (option in default_options) {
 				if (!stored_options.hasOwnProperty(option)) {
