@@ -85,7 +85,9 @@
 			},
 
 			add: (tasks) => {
-
+				if (tasks.length !== 0) {
+					$.merge(app.Tasks.items, tasks);
+				}
 			},
 
 			deleteBy: (deleteBy, value) => {
