@@ -140,7 +140,7 @@
 		// ============================================================================ //
 
 		init: (parent, tasksContainer) => {
-			$(parent).on("load", () => {
+			$(parent).ready(() => {
 				app.setIcon("active");
 			});
 
@@ -263,7 +263,7 @@
 
 		setIcon: (state) => {
 			chrome.browserAction.setIcon({
-				"path": "../img/ext_icons/" + state + ".png"
+				"path": chrome.runtime.getURL("../img/ext_icons/" + state + ".png")
 			});
 		}
 		// ============================================================================ //
