@@ -41,6 +41,12 @@
 	"showsetIconEmpty": {
 		"message": "настройки"
 	},
+	"saveTitle": {
+		"message": "Сохранить настройки"
+	},
+	"saveIconEmpty": {
+		"message": "сохранить"
+	},
 	"hidesetTitle": {
 		"message": "Назад"
 	},

@@ -41,6 +41,12 @@
 	"showsetIconEmpty": {
 		"message": "settings"
 	},
+	"saveTitle": {
+		"message": "Save settings"
+	},
+	"saveIconEmpty": {
+		"message": "save"
+	},
 	"hidesetTitle": {
 		"message": "Back To do"
 	},
