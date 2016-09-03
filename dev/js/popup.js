@@ -161,32 +161,50 @@
 		},
 
 		binds: (parent, tasksContainer, callback) => {
-			// ------------------------------ lock block ------------------------------ //
+			app.lockBinds(parent);
+			app.searchBinds(parent);
+			app.settingsBinds(parent);
+
+			callback && callback();
+		},
+
+		// -------------------------------- lock block -------------------------------- //
+		lockBinds: (parent) => {
 			let lockList = ".brand, .search__icon, .sync__icon, .showset__icon, .hideset__icon, .overlay";
 
 			$(parent).on("click", lockList, (e) => {
-				if (app.lock) {					// If the UI is locked
-					e.stopImmediatePropagation();	// stop the event
-					return false;					// or stop open link
+				if (app.lock) {							// If the UI is locked
+					e.stopImmediatePropagation();		// stop the event
+					return false;						// or stop open link
 				}
 			});
-			// ======================================================================== //
+		},
+		// ============================================================================ //
 
-			// ----------------------------- search block ----------------------------- //
+		// ------------------------------- search block ------------------------------- //
+		searchBinds: (parent) => {
 			let searchText = $(parent).find(".search__text"),
 				searchClassActive = "search__text-active";
 
-			$(parent).on("click", ".search__icon", () => {
-				if (searchText.hasClass(searchClassActive)) {
-					searchText.removeClass(searchClassActive);
-					$(parent).focus();
-				} else {
-					searchText.addClass(searchClassActive).focus();
+			$(parent).on("mouseenter", ".search__icon", () => {
+				searchText.addClass("will-transform");
+			});
+			$(parent).on("mouseleave", ".search__icon", () => {
+				if (!searchText.hasClass(searchClassActive)) {
+					searchText.removeClass("will-transform");
 				}
 			});
-			// ======================================================================== //
+			$(parent).on("click", ".search__icon", () => {
+				searchText.addClass(searchClassActive).focus();
+			});
+			$(parent).on("blur", ".search__text", () => {
+				searchText.removeClass(searchClassActive);
+			});
+		},
+		// ============================================================================ //
 
-			// ---------------------------- settings block ---------------------------- //
+		// ------------------------------ settings block ------------------------------ //
+		settingsBinds: (parent) => {
 			let settings = $(parent).find(".settings"),
 				overlay = $(parent).find(".overlay"),
 				removeWillTimeoutID = null;
@@ -225,11 +243,10 @@
 
 				app.lock = false;
 			});
-			// ======================================================================== //
-
-			callback && callback();
 		},
+		// ============================================================================ //
 
+		// --------------------------- additional funcrions --------------------------- //
 		setWidthСonsiderScroll: (block) => {
 			let main = $(".main"), list = $(block),
 				appHeight = $(".app").height(),
@@ -249,8 +266,9 @@
 				"path": "../img/ext_icons/" + state + ".png"
 			});
 		}
+		// ============================================================================ //
 	};
 	// ================================================================================ //
 
-	app.init(document, ".list");					// Or return app, if we use autoloader
+	app.init(document, ".list");					// Or return app, if using autoloader
 })(jQuery)
