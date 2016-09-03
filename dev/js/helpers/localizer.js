@@ -2,7 +2,7 @@ window.addEventListener('load', function () {
 	function translator(html) {
 		var i,
 		length,
-		attrs_to_check = ['title', 'alt', 'placeholder', 'value', 'href'];
+		attrs_to_check = ['title', 'alt', 'placeholder', 'value', 'href', 'lang'];
 
 		function replacer(text) {
 			return text.replace(/\{\{([\s\S]*?)\}\}/gm, function (str, g1) {
