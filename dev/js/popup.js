@@ -72,7 +72,16 @@
 			},
 
 			set: (tasks) => {
-
+				if (tasks.length !== 0 && app.Tasks.items.length !== 0) {
+					$.each(tasks, (i, newTask) => {
+						$.each(app.Tasks.items, (j, oldTask) => {
+							if (oldTask.id === newTask.id) {
+								oldTask = newTask;
+								return false;
+							}
+						});
+					});
+				}
 			},
 
 			add: (tasks) => {
