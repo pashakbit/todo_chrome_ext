@@ -2,7 +2,7 @@
 <html lang="{{lang}}">
 	<head>
 		<meta charset="utf-8">
-		<title>{{extName}}</title>
+		<title>{{Name}}</title>
 		<link rel="stylesheet" href="../css/popup.css">
 	</head>
 
@@ -13,10 +13,10 @@
 					<img class="brand__icon" src="../img/logo.png" alt="{{logoIconEmpty}}">
 				</a>
 
-				<div class="curtask" title="{{extDesc}}">{{extName}}</div>
+				<div class="curtask" title="{{Desc}}">{{Name}}</div>
 
 				<div class="search">
-					<input class="search__text" type="text" maxlength="64" placeholder="{{searchPlaceholder}}">
+					<input class="search__text" type="text" maxlength="64" placeholder="{{search.placeholder}}">
 					<img class="search__icon" src="../img/search.png" title="{{searchTitle}}" alt="{{searchIconEmpty}}">
 				</div>
 			</header>
@@ -30,7 +30,7 @@
 					<img class="sync__icon" src="../img/sync.png" title="{{syncTitle}}" alt="{{syncIconEmpty}}">
 				</div>
 
-				<div class="info">{{extInfo}}</div>
+				<div class="info">{{Info}}</div>
 
 				<div class="showset">
 					<img class="showset__icon" src="../img/showset.png" title="{{showsetTitle}}" alt="{{showsetIconEmpty}}">
@@ -38,16 +38,54 @@
 			</footer>
 
 			<aside class="settings">
-				<div class="settings__header">{{extSettings}}</div>
+				<div class="settings__header">{{Settings}}</div>
 
-				<div class="settings__body"></div>
+				<div class="settings__body">
+					<div class="settings__item">
+						<label for="sync">
+							<div class="settings__key">{{sync}}</div>
+							<div class="settings__value">
+								<input class="settings__input settings__input-check" id="sync" type="checkbox">
+							</div>
+						</label>
+					</div>
+
+					<div class="settings__item" data-sub="sync">
+						<label for="syncPeriod">
+							<div class="settings__key">{{syncPeriod}}</div>
+							<div class="settings__value">
+								<select class="settings__input settings__input-select" id="syncPeriod">
+									<option value="1">1 {{minute}}</option>
+									<option value="2">2 {{minute}}</option>
+									<option value="3">3 {{minute}}</option>
+									<option value="4">4 {{minute}}</option>
+									<option value="5">5 {{minute}}</option>
+									<option value="6">6 {{minute}}</option>
+									<option value="7">7 {{minute}}</option>
+									<option value="8">8 {{minute}}</option>
+									<option value="9">9 {{minute}}</option>
+									<option value="10">10 {{minute}}</option>
+								</select>
+							</div>
+						</label>
+					</div>
+
+					<div class="settings__item">
+						<label for="showTitles">
+							<div class="settings__key">{{showTitles}}</div>
+							<div class="settings__value">
+								<input class="settings__input settings__input-check" id="showTitles" type="checkbox">
+							</div>
+						</label>
+					</div>
+				</div>
 
 				<div class="settings__footer">
 					<div class="save">
 						<img class="save__icon" src="../img/save.png" title="{{saveTitle}}" alt="{{saveIconEmpty}}">
 					</div>
 
-					<div class="info">{{extInfo}}</div>
+					<div class="info">{{Info}}</div>
 
 					<div class="hideset">
 						<img class="hideset__icon" src="../img/arrow.png" title="{{hidesetTitle}}" alt="{{hidesetIconEmpty}}">

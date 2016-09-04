@@ -1,30 +1,32 @@
 {
+"__comment": {"message": "=============== Main extension locales ==============="},
 	"lang": {
 		"message": "en"
 	},
-	"extName": {
+	"Name": {
 		"message": "Todo Light"
 	},
-	"extDesc": {
+	"Desc": {
 		"message": "Extension's description"
 	},
-	"extSettings": {
+	"Settings": {
 		"message": "Settings"
 	},
-	"extInfo": {
+	"Info": {
 		"message": "2016 Copyright, MIT License"
 	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "======================== Icons ======================="},
 	"logoTitle": {
 		"message": "Visit this project on github"
 	},
 	"logoIconEmpty": {
-		"message": "logo"
+		"message": "ToDo"
 	},
 	"searchTitle": {
 		"message": "Find tasks"
-	},
-	"searchPlaceholder": {
-		"message": "Search tasks by title and content"
 	},
 	"searchIconEmpty": {
 		"message": "search"
@@ -52,5 +54,29 @@
 	},
 	"hidesetIconEmpty": {
 		"message": "back"
-	}
+	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "======================= Search ======================="},
+	"searchPlaceholder": {
+		"message": "Search tasks by title and content"
+	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "====================== Settings ======================"},
+	"sync": {
+		"message": "Synchronization"
+	},
+	"syncPeriod": {
+		"message": "Synchronization period"
+	},
+	"showTitles": {
+		"message": "Show titles"
+	},
+	"minute": {
+		"message": "min"
+	},
+"__comment": {"message": "======================================================"}
 }

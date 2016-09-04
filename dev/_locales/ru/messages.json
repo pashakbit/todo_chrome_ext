@@ -1,30 +1,32 @@
 {
+"__comment": {"message": "=============== Main extension locales ==============="},
 	"lang": {
 		"message": "ru"
 	},
-	"extName": {
+	"Name": {
 		"message": "Todo Light"
 	},
-	"extDesc": {
+	"Desc": {
 		"message": "Краткое описание расширения"
 	},
-	"extSettings": {
+	"Settings": {
 		"message": "Настройки"
 	},
-	"extInfo": {
+	"Info": {
 		"message": "2016 Copyright, MIT License"
 	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "======================== Icons ======================="},
 	"logoTitle": {
 		"message": "Посетите проект на github"
 	},
 	"logoIconEmpty": {
-		"message": "лого"
+		"message": "ToDo"
 	},
 	"searchTitle": {
 		"message": "Поиск тасок"
-	},
-	"searchPlaceholder": {
-		"message": "Поиск по названию и содержанию"
 	},
 	"searchIconEmpty": {
 		"message": "поиск"
@@ -52,5 +54,29 @@
 	},
 	"hidesetIconEmpty": {
 		"message": "назад"
-	}
+	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "======================= Search ======================="},
+	"placeholder": {
+		"message": "Поиск по названию и содержанию"
+	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "====================== Settings ======================"},
+	"sync": {
+		"message": "Синхронизация"
+	},
+	"syncPeriod": {
+		"message": "Период синхронизации"
+	},
+	"showTitles": {
+		"message": "Показывать тайтлы"
+	},
+	"minute": {
+		"message": "мин"
+	},
+"__comment": {"message": "======================================================"}
 }
