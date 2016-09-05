@@ -1,2 +1,2 @@
 
-var storageOptions={area:chrome.storage.local,default_options:{}};
+var storageOptions={area:chrome.storage.sync,default_options:{sync:true,syncPeriod:"5",showTitles:true}};

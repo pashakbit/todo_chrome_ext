@@ -78,5 +78,15 @@
 	"minute": {
 		"message": "min"
 	},
+"__comment": {"message": "======================================================"},
+
+
+"__comment": {"message": "====================== Tooltips ======================"},
+	"tooltipSave": {
+		"message": "Save the settings on the server. It's help you synchronizate your settings on other devices"
+	},
+	"tooltipSaveOk": {
+		"message": "Settings successfully saved on the server"
+	},
 "__comment": {"message": "======================================================"}
 }

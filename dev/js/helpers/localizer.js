@@ -1,6 +1,6 @@
 window.addEventListener('load', function () {
 	function translator(html) {
-		var i,
+		let i,
 		length,
 		attrs_to_check = ['title', 'alt', 'placeholder', 'value', 'href', 'lang'];
 

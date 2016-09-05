@@ -1,8 +1,10 @@
 // ------------------------------- Settings options ------------------------------- //
 var storageOptions = {
-	area: chrome.storage.local,
+	area: chrome.storage.sync,
 	default_options: {
-
+		sync: true,
+		syncPeriod: "5",
+		showTitles: true
 	}
 };
 // ================================================================================ //

@@ -164,7 +164,7 @@
 				)
 			);
 
-			app.setWidthСonsiderScroll(tasksContainer);
+			app.setWidthСonsiderScroll($(tasksContainer).parent().attr("class"), tasksContainer);
 
 			app.binds(parent, tasksContainer, () => {
 				app.lock = false;
@@ -217,8 +217,12 @@
 		// ------------------------------ settings block ------------------------------ //
 		settingsBinds: (parent) => {
 			let settings = $(parent).find(".settings"),
+				saveSettings = $(parent).find(".save"),
 				overlay = $(parent).find(".overlay"),
-				removeWillTimeoutID = null;
+				showTitles = $(parent).find("#showTitles"),
+				tooltipHideTimeoutID = null,
+				removeWillTimeoutID = null,
+				tooltipsDuration = 4000;
 
 			$(parent).on("mouseenter", ".showset__icon, .hideset__icon, .overlay", () => {
 				clearTimeout(removeWillTimeoutID);
@@ -254,22 +258,62 @@
 
 				app.lock = false;
 			});
+
+			$(parent).on("change", "[data-storage]", () => {
+				if (!saveSettings.hasClass("save-unsave") && showTitles.prop("checked")) {
+					saveSettings.addClass("save-unsave");
+					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSave");
+
+					clearTimeout(tooltipHideTimeoutID);
+					tooltipHideTimeoutID = null;
+					tooltipHideTimeoutID = setTimeout(() => {
+						saveSettings.find(".save__tooltip").removeClass("save__tooltip-active");
+					}, tooltipsDuration);
+				}
+			});
+			$(parent).on("click", ".save-unsave", () => {
+				if (showTitles.prop("checked")) {
+					saveSettings.removeClass("save-unsave");
+					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSaveOk");
+
+					clearTimeout(tooltipHideTimeoutID);
+					tooltipHideTimeoutID = null;
+					tooltipHideTimeoutID = setTimeout(() => {
+						saveSettings.find(".save__tooltip").removeClass("save__tooltip-active");
+					}, tooltipsDuration);
+
+					app.saveSettingsOnServer(storageOptions.default_options);
+				}
+			});
 		},
 		// ============================================================================ //
 
 		// --------------------------- additional funcrions --------------------------- //
-		setWidthСonsiderScroll: (block) => {
-			let main = $(".main"), list = $(block),
+		setWidthСonsiderScroll: (body, block) => {
+			let main = $(body), list = $(block),
 				appHeight = $(".app").height(),
 				headerHeight = $(".header").height(),
 				footerHeight = $(".footer").height(),
 				maxHeight = appHeight - headerHeight - footerHeight;
 
 			if (list.height() > maxHeight) {
-				main.addClass("main-scroll");
+				main.addClass("scroll-block");
 			} else {
-				main.removeClass("main-scroll");
+				main.removeClass("scroll-block");
 			}
+		},
+
+		saveSettingsOnServer: (settings) => {
+			// $.ajax({
+			// 	url: config.host + "/users/" + config.userId + "/settings",
+			// 	method: "post",
+			// 	dataType: "json",
+			// 	data: $.stringify(settings)
+			// }).then((data) => {
+
+			// }, (error) => {
+			// 	console.log(error);
+			// });
 		},
 
 		setIcon: (state) => {

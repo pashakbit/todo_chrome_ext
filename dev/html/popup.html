@@ -16,7 +16,7 @@
 				<div class="curtask" title="{{Desc}}">{{Name}}</div>
 
 				<div class="search">
-					<input class="search__text" type="text" maxlength="64" placeholder="{{search.placeholder}}">
+					<input class="search__text" type="text" maxlength="64" placeholder="{{searchPlaceholder}}">
 					<img class="search__icon" src="../img/search.png" title="{{searchTitle}}" alt="{{searchIconEmpty}}">
 				</div>
 			</header>
@@ -41,47 +41,37 @@
 				<div class="settings__header">{{Settings}}</div>
 
 				<div class="settings__body">
-					<div class="settings__item">
-						<label for="sync">
-							<div class="settings__key">{{sync}}</div>
-							<div class="settings__value">
-								<input class="settings__input settings__input-check" id="sync" type="checkbox">
-							</div>
-						</label>
-					</div>
+					<label class="settings__item settings__item-check" for="sync">
+						<div class="settings__key">{{sync}}</div>
+						<div class="settings__value">
+							<input class="settings__input" id="sync" type="checkbox" data-storage="sync">
+						</div>
+					</label>
 
-					<div class="settings__item" data-sub="sync">
-						<label for="syncPeriod">
-							<div class="settings__key">{{syncPeriod}}</div>
-							<div class="settings__value">
-								<select class="settings__input settings__input-select" id="syncPeriod">
-									<option value="1">1 {{minute}}</option>
-									<option value="2">2 {{minute}}</option>
-									<option value="3">3 {{minute}}</option>
-									<option value="4">4 {{minute}}</option>
-									<option value="5">5 {{minute}}</option>
-									<option value="6">6 {{minute}}</option>
-									<option value="7">7 {{minute}}</option>
-									<option value="8">8 {{minute}}</option>
-									<option value="9">9 {{minute}}</option>
-									<option value="10">10 {{minute}}</option>
-								</select>
-							</div>
-						</label>
-					</div>
+					<label class="settings__item settings__item-select" data-sub="sync" for="syncPeriod">
+						<div class="settings__key">{{syncPeriod}}</div>
+						<div class="settings__value">
+							<select class="settings__input" id="syncPeriod" data-storage="syncPeriod">
+								<option value="1">1 {{minute}}</option>
+								<option value="3">3 {{minute}}</option>
+								<option value="5">5 {{minute}}</option>
+								<option value="10">10 {{minute}}</option>
+								<option value="20">20 {{minute}}</option>
+							</select>
+						</div>
+					</label>
 
-					<div class="settings__item">
-						<label for="showTitles">
-							<div class="settings__key">{{showTitles}}</div>
-							<div class="settings__value">
-								<input class="settings__input settings__input-check" id="showTitles" type="checkbox">
-							</div>
-						</label>
-					</div>
+					<label class="settings__item settings__item-check" for="showTitles">
+						<div class="settings__key">{{showTitles}}</div>
+						<div class="settings__value">
+							<input class="settings__input" id="showTitles" type="checkbox" data-storage="showTitles">
+						</div>
+					</label>
 				</div>
 
 				<div class="settings__footer">
 					<div class="save">
+						<div class="save__tooltip">{{tooltipSave}}</div>
 						<img class="save__icon" src="../img/save.png" title="{{saveTitle}}" alt="{{saveIconEmpty}}">
 					</div>
 
