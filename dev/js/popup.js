@@ -262,7 +262,7 @@
 			$(parent).on("change", "[data-storage]", () => {
 				if (!saveSettings.hasClass("save-unsave") && showTitles.prop("checked")) {
 					saveSettings.addClass("save-unsave");
-					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSave");
+					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSave"));
 
 					clearTimeout(tooltipHideTimeoutID);
 					tooltipHideTimeoutID = null;
@@ -274,7 +274,7 @@
 			$(parent).on("click", ".save-unsave", () => {
 				if (showTitles.prop("checked")) {
 					saveSettings.removeClass("save-unsave");
-					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSaveOk");
+					saveSettings.find(".save__tooltip").addClass("save__tooltip-active").text(chrome.i18n.getMessage("tooltipSaveOk"));
 
 					clearTimeout(tooltipHideTimeoutID);
 					tooltipHideTimeoutID = null;
