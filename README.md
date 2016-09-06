@@ -1,2 +1,2 @@
 # Todo Light
-Light Todo chrome extension with local storage and sync with server (optional)
+Light Todo chrome extension with local storage as a database and server synchronization (optional)
