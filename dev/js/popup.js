@@ -84,6 +84,24 @@
 				}
 			},
 
+			setProp: (id, prop, value) => {
+				if (itemVars.indexOf(prop) === -1 || prop === "id" || !app.Tasks.typeConform(prop, value)) {
+					return {};
+				} else {
+					let bufTask = {};
+
+					$.each(app.Tasks.items, (i, task) => {
+						if (task.id === id) {
+							task[prop] = value;
+							bufTask = task;
+							return false;
+						}
+					});
+
+					return bufTask;
+				}
+			},
+
 			add: (tasks) => {
 				if (tasks.length !== 0) {
 					$.merge(app.Tasks.items, tasks);
@@ -118,7 +136,7 @@
 
 					tasksHtml.push([
 						"<li class='item'>",
-							"<img class='item__completed' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
+							"<img class='item__completed item__completed-", stateTask, "' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
 
 							"<span class='item__head' href='", task.url, "' title='", task.title, "' target='_blank'>",
 								task.title,
@@ -134,6 +152,22 @@
 				});
 
 				return tasksHtml.join("");
+			},
+			typeConform: (prop, value) => {
+				switch(prop) {
+					case "id":
+						return typeof value === "string";
+					case "title":
+						return typeof value === "string";
+					case "content":
+						return typeof value === "string";
+					case "url":
+						return typeof value === "string";
+					case "order":
+						return typeof value === "number";
+					case "completed":
+						return typeof value === "boolean";
+				}
 			},
 			getState: () => {
 				let state = "active";
