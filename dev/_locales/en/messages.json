@@ -88,5 +88,8 @@
 	"tooltipSaveOk": {
 		"message": "Settings successfully saved on the server"
 	},
+	"tooltipSaveAlready": {
+		"message": "Settings already saved"
+	},
 "__comment": {"message": "======================================================"}
 }
