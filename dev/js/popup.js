@@ -50,13 +50,13 @@
 		Tasks: {
 			serverContentInTitle: true,				// I hope, that this is stopgap only
 			itemVars: ["id", "title", "completed" ,"order", "url", "content"],
-			items: chrome.storage.sync.tasks,
+			items: chrome.storage.sync.tasks || [],
 
 			getAll: () => {
 				return app.Tasks.items || [];
 			},
 			getBy: (getBy, value) => {
-				if (typeof value === "undefined" || value === null || itemVars.indexOf(getBy) === -1) {
+				if (typeof value === "undefined" || value === null || app.Tasks.itemVars.indexOf(getBy) === -1) {
 					return app.Tasks.items || [];
 				} else {
 					let bufTasks = [];
@@ -85,7 +85,7 @@
 			},
 
 			setProp: (id, prop, value) => {
-				if (itemVars.indexOf(prop) === -1 || prop === "id" || !app.Tasks.typeConform(prop, value)) {
+				if (app.Tasks.itemVars.indexOf(prop) === -1 || prop === "id" || !app.Tasks.typeConform(prop, value)) {
 					return {};
 				} else {
 					let bufTask = {};
@@ -135,14 +135,12 @@
 					stateTask = (task.completed ? "completed" : "uncompleted");
 
 					tasksHtml.push([
-						"<li class='item'>",
-							"<img class='item__completed item__completed-", stateTask, "' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
+						"<li class='item' data-id='", task.id, "'>",
+							"<img class='item__state item__state-", stateTask, "' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
 
 							"<span class='item__head' href='", task.url, "' title='", task.title, "' target='_blank'>",
 								task.title,
 							"</span>",
-
-							//"<span class='item__id'>", task.id, "</span>",
 
 							"<div class='item__content'>",
 								task.content,
@@ -209,6 +207,7 @@
 			app.lockBinds(parent);
 			app.searchBinds(parent);
 			app.settingsBinds(parent);
+			app.itemsBinds(tasksContainer);
 
 			callback && callback();
 		},
@@ -327,6 +326,41 @@
 						"save__tooltip",
 						chrome.i18n.getMessage("tooltipSaveAlready")
 					);
+				}
+			});
+		},
+		// ============================================================================ //
+
+		// ------------------------------- search block ------------------------------- //
+		itemsBinds: (parent) => {
+			let itemsClassState = "item__state",
+				itemsClassCompleted = "item__state-completed",
+				itemsClassUncompleted = "item__state-uncompleted",
+				itemsClassClick = "item__state-click",
+				itemSrc = "",
+				itemId = "",
+				rotateDuration = 350;
+
+			$(parent).on("click", ".item__state", (e) => {
+				if (!$(e.target).hasClass(itemsClassClick)) {
+					$(e.target).toggleClass(itemsClassCompleted)
+						.toggleClass(itemsClassUncompleted)
+						.addClass(itemsClassClick);
+
+					itemId = $(e.target).closest(itemsClassState).data("id");
+
+					if ($(e.target).hasClass(itemsClassCompleted)) {
+						app.Tasks.setProp(itemId, "completed", true);
+						itemSrc = "../img/completed.png";
+					} else {
+						app.Tasks.setProp(itemId, "completed", false);
+						itemSrc = "../img/uncompleted.png";
+					}
+
+					setTimeout(() => {
+						$(e.target).attr("src", itemSrc);
+						$(e.target).removeClass(itemsClassClick);
+					}, rotateDuration);
 				}
 			});
 		},

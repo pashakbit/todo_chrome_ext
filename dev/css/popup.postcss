@@ -29,7 +29,9 @@
 	--itemBg: #fafbfc;
 	--itemCompletedBg: #3f51b5;
 	--itemUncompletedBg: #d00;
-	--itemCompletedShadowHover: 0 0 6px 2px var(--mainShadowColor1), 0 0 3px 1px var(--mainShadowColor2);
+	--itemStateAnimDuration: .35s;
+	--itemStateAnimType: ease-in;
+	--itemStateShadowHover: 0 0 6px 2px var(--mainShadowColor1), 0 0 3px 1px var(--mainShadowColor2);
 	--itemShadow: 0 1px 2px var(--mainShadowColor1), 0 1px 2px var(--mainShadowColor2);
 	--itemShadowHover: 0 3px 4px var(--mainShadowColor1), 0 3px 4px var(--mainShadowColor2);
 	--itemSubContentColor: #757575;
@@ -383,7 +385,7 @@ html, body {
 			box-shadow: var(--itemShadowHover);
 		}
 
-		&__completed {
+		&__state {
 			@mixin btnStyles;
 
 			cursor: pointer;
@@ -391,14 +393,20 @@ html, body {
 			transition: box-shadow var(--mainAnimDuration) var(--mainAnimType);
 
 			&:hover {
-				box-shadow: var(--itemCompletedShadowHover);
+				box-shadow: var(--itemStateShadowHover);
 			}
 
 			&-completed {
 				background: var(--itemCompletedBg);
+				transition: all var(--itemStateAnimDuration) var(--itemStateAnimType);
 			}
 			&-uncompleted {
 				background: var(--itemUncompletedBg);
+				transition: all var(--itemStateAnimDuration) var(--itemStateAnimType);
+			}
+			&-click {
+				border-radius: 50%;
+				transform: rotate(-1080deg);
 			}
 		}
 		&__head {
@@ -416,17 +424,17 @@ html, body {
 
 			font: var(--contentHeadFont);
 		}
-		/* &__id {
+		&__id {
 			position: absolute;
-			display: inline-block;
+			display: none;
 
-			top: calc(var(--subElHeight) + (var(--mainPadding) / 4));
+			/* top: calc(var(--subElHeight) + (var(--mainPadding) / 4));
 			right: var(--mainPadding);
 
 			color: var(--itemSubContentColor);
 
-			font: var(--contentFont);
-		} */
+			font: var(--contentFont); */
+		}
 		&__content {
 			display: block;
 
