@@ -2,46 +2,48 @@
 
 (($) => {
 	// ----------------------------------- Main app ----------------------------------- //
-	chrome.storage.sync.tasks = [{
-		id: "1",
-		title: "First task",
-		completed: true,
-		order: 1,
-		url: "",
-		content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?"
-	},
-	{
-		id: "2",
-		title: "Smoll",
-		completed: false,
-		order: 2,
-		url: "",
-		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
-	},
-	{
-		id: "3",
-		title: "It's task have medium head size",
-		completed: true,
-		order: 3,
-		url: "",
-		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
-	},
-	{
-		id: "4",
-		title: "It's task have Large head size for testing UI on my browser",
-		completed: false,
-		order: 4,
-		url: "",
-		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
-	},
-	{
-		id: "5",
-		title: "Task with many space                                         ",
-		completed: true,
-		order: 5,
-		url: "",
-		content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
-	}];
+	chrome.storage.sync.set({
+		tasks: [{
+			id: "1",
+			title: "First task",
+			completed: true,
+			order: 1,
+			url: "",
+			content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?"
+		},
+		{
+			id: "2",
+			title: "Smoll",
+			completed: false,
+			order: 2,
+			url: "",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+		},
+		{
+			id: "3",
+			title: "It's task have medium head size",
+			completed: true,
+			order: 3,
+			url: "",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+		},
+		{
+			id: "4",
+			title: "It's task have Large head size for testing UI on my browser",
+			completed: false,
+			order: 4,
+			url: "",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+		},
+		{
+			id: "5",
+			title: "Task with many space                                         ",
+			completed: true,
+			order: 5,
+			url: "",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+		}]
+	});
 
 	let app = {
 		lock: true,									// Lock UI while app load or/and render
@@ -50,7 +52,15 @@
 		Tasks: {
 			serverContentInTitle: true,				// I hope, that this is stopgap only
 			itemVars: ["id", "title", "completed" ,"order", "url", "content"],
-			items: chrome.storage.sync.tasks || [],
+			items: [],
+
+			init: (callback) => {
+				chrome.storage.sync.get("tasks", (data) => {
+					app.Tasks.items = data.tasks;
+
+					callback && callback();
+				});
+			},
 
 			getAll: () => {
 				return app.Tasks.items || [];
@@ -73,14 +83,21 @@
 
 			set: (tasks) => {
 				if (tasks.length !== 0 && app.Tasks.items.length !== 0) {
+					let setFlag = false;
+
 					$.each(tasks, (i, newTask) => {
 						$.each(app.Tasks.items, (j, oldTask) => {
 							if (oldTask.id === newTask.id) {
 								oldTask = newTask;
+								setFlag = true;
 								return false;
 							}
 						});
 					});
+
+					if (setFlag) {
+						chrome.storage.sync.set({tasks: app.Tasks.items});
+					}
 				}
 			},
 
@@ -88,15 +105,21 @@
 				if (app.Tasks.itemVars.indexOf(prop) === -1 || prop === "id" || !app.Tasks.typeConform(prop, value)) {
 					return {};
 				} else {
-					let bufTask = {};
+					let bufTask = {},
+						setFlag = false;
 
 					$.each(app.Tasks.items, (i, task) => {
 						if (task.id === id) {
 							task[prop] = value;
 							bufTask = task;
+							setFlag = true;
 							return false;
 						}
 					});
+
+					if (setFlag) {
+						chrome.storage.sync.set({tasks: app.Tasks.items});
+					}
 
 					return bufTask;
 				}
@@ -104,7 +127,7 @@
 
 			add: (tasks) => {
 				if (tasks.length !== 0) {
-					$.merge(app.Tasks.items, tasks);
+					chrome.storage.sync.set({tasks: $.merge(app.Tasks.items, tasks)});
 				}
 			},
 
@@ -187,19 +210,21 @@
 				app.setIcon("active");
 			});
 
-			$(tasksContainer).empty().append(
-				app.Tasks.toHtml(
-					app.Tasks.sort(
-						app.Tasks.getAll(),
-						"order"
+			app.Tasks.init(() => {
+				$(tasksContainer).append(
+					app.Tasks.toHtml(
+						app.Tasks.sort(
+							app.Tasks.getAll(),
+							"order"
+						)
 					)
-				)
-			);
+				);
 
-			app.setWidthСonsiderScroll($(tasksContainer).parent().attr("class"), tasksContainer);
+				app.setWidthСonsiderScroll($(tasksContainer).parent().attr("class"), tasksContainer);
 
-			app.binds(parent, tasksContainer, () => {
-				app.lock = false;
+				app.binds(parent, tasksContainer, () => {
+					app.lock = false;
+				});
 			});
 		},
 
@@ -250,12 +275,13 @@
 		// ------------------------------ settings block ------------------------------ //
 		settingsBinds: (parent) => {
 			let settings = $(parent).find(".settings"),
-				saveSettings = $(parent).find(".save"),
+				saveSets = $(parent).find(".save"),
 				overlay = $(parent).find(".overlay"),
 				showTitles = $(parent).find("#showTitles"),
-				tooltipHideTimeoutID = null,
 				removeWillTimeoutID = null,
-				tooltipsDelay = 4000;
+				tooltipHideTimeoutID = null,
+				tooltipMes = "",
+				tooltipDelay = 4000;
 
 			$(parent).on("mouseenter", ".showset__icon, .hideset__icon, .overlay", () => {
 				clearTimeout(removeWillTimeoutID);
@@ -293,63 +319,59 @@
 			});
 
 			$(parent).on("change", "[data-storage]", () => {
-				if (!saveSettings.hasClass("save-unsave")) {
-					saveSettings.addClass("save-unsave");
+				tooltipMes = chrome.i18n.getMessage("tooltipSave");
+
+				if (!saveSets.hasClass("save-unsave")) {
+					saveSets.addClass("save-unsave");
 
 					clearTimeout(tooltipHideTimeoutID);
-					tooltipHideTimeoutID = app.showTooltip(
-						saveSettings,
-						tooltipsDelay,
-						"save__tooltip",
-						chrome.i18n.getMessage("tooltipSave")
+					tooltipHideTimeoutID = app.showTooltip(saveSets, tooltipDelay,	"save__tooltip", tooltipMes,
+						(parent, classTip) => {
+							app.hideTooltip(parent, classTip);
+						}
 					);
 				}
 			});
 			$(parent).on("click", ".save", () => {
-				if (saveSettings.hasClass("save-unsave")) {
-					saveSettings.removeClass("save-unsave");
+				clearTimeout(tooltipHideTimeoutID);
+				tooltipMes = chrome.i18n.getMessage("tooltipSaveAlready");
 
-					clearTimeout(tooltipHideTimeoutID);
-					tooltipHideTimeoutID = app.showTooltip(
-						saveSettings,
-						tooltipsDelay,
-						"save__tooltip",
-						chrome.i18n.getMessage("tooltipSaveOk")
-					);
-
-					app.saveSettingsOnServer(storageOptions.default_options);
-				} else {
-					clearTimeout(tooltipHideTimeoutID);
-					tooltipHideTimeoutID = app.showTooltip(
-						saveSettings,
-						tooltipsDelay,
-						"save__tooltip",
-						chrome.i18n.getMessage("tooltipSaveAlready")
-					);
+				if (saveSets.hasClass("save-unsave")) {
+					saveSets.removeClass("save-unsave");
+					app.saveSetsOnServer(storageOptions.default_options);
+					tooltipMes = chrome.i18n.getMessage("tooltipSaveOk");
 				}
+
+				tooltipHideTimeoutID = app.showTooltip(saveSets, tooltipDelay,	"save__tooltip", tooltipMes,
+					(parent, classTip) => {
+						app.hideTooltip(parent, classTip);
+					}
+				);
 			});
 		},
 		// ============================================================================ //
 
 		// ------------------------------- search block ------------------------------- //
 		itemsBinds: (parent) => {
-			let itemsClassState = "item__state",
-				itemsClassCompleted = "item__state-completed",
-				itemsClassUncompleted = "item__state-uncompleted",
-				itemsClassClick = "item__state-click",
+			let itemClass = "item",
+				itemClassState = "item__state",
+				itemClassCompleted = "item__state-completed",
+				itemClassUncompleted = "item__state-uncompleted",
+				itemClassClick = "item__state-click",
 				itemSrc = "",
 				itemId = "",
-				rotateDuration = 350;
+				itemAnimTimeout = null,
+				rotateDuration = 300;
 
-			$(parent).on("click", ".item__state", (e) => {
-				if (!$(e.target).hasClass(itemsClassClick)) {
-					$(e.target).toggleClass(itemsClassCompleted)
-						.toggleClass(itemsClassUncompleted)
-						.addClass(itemsClassClick);
+			$(parent).on("click", "." + itemClassState, (e) => {
+				if (!$(e.target).hasClass(itemClassClick)) {
+					$(e.target).toggleClass(itemClassCompleted)
+						.toggleClass(itemClassUncompleted)
+						.addClass(itemClassClick);
 
-					itemId = $(e.target).closest(itemsClassState).data("id");
+					itemId = $(e.target).closest("." + itemClass).data("id").toString();
 
-					if ($(e.target).hasClass(itemsClassCompleted)) {
+					if ($(e.target).hasClass(itemClassCompleted)) {
 						app.Tasks.setProp(itemId, "completed", true);
 						itemSrc = "../img/completed.png";
 					} else {
@@ -357,9 +379,12 @@
 						itemSrc = "../img/uncompleted.png";
 					}
 
-					setTimeout(() => {
+					itemAnimTimeout = setTimeout(() => {
+						clearTimeout(itemAnimTimeout);
+						itemAnimTimeout = null;
+
 						$(e.target).attr("src", itemSrc);
-						$(e.target).removeClass(itemsClassClick);
+						$(e.target).removeClass(itemClassClick);
 					}, rotateDuration);
 				}
 			});
@@ -367,8 +392,8 @@
 		// ============================================================================ //
 
 		// --------------------------- additional funcrions --------------------------- //
-		setWidthСonsiderScroll: (body, block) => {
-			let main = $(body), list = $(block),
+		setWidthСonsiderScroll: (bodyList, blockList) => {
+			let main = $(bodyList), list = $(blockList),
 				appHeight = $(".app").height(),
 				headerHeight = $(".header").height(),
 				footerHeight = $(".footer").height(),
@@ -381,7 +406,7 @@
 			}
 		},
 
-		saveSettingsOnServer: (settings) => {
+		saveSetsOnServer: (settings) => {
 			// $.ajax({
 			// 	url: config.host + "/users/" + config.userId + "/settings",
 			// 	method: "post",
@@ -395,12 +420,24 @@
 		},
 
 		showTooltip: (parent, delay, classTip, message, callback) => {
-			parent.find("." + classTip).addClass(classTip + "-active").text(message);
+			$(parent).find("." + classTip).addClass(classTip + "-active").text(message);
 
 			return setTimeout(() => {
-				parent.find("." + classTip).removeClass(classTip + "-active");
-				callback && callback();
+				callback && callback(parent, classTip);
 			}, delay);
+		},
+
+		hideTooltip: (parent, classTip, callback) => {
+			$(parent).find("." + classTip).removeClass(classTip + "-active");
+			callback && callback();
+		},
+
+		getCssProp: (prop) => {
+			return document.documentElement.style.getPropertyValue(prop);
+		},
+
+		setCssProp: (prop, value) => {
+			return document.documentElement.style.setProperty(prop, value);
 		},
 
 		setIcon: (state) => {

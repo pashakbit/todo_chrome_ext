@@ -1,17 +1,8 @@
 window.addEventListener('load', function () {
 	var event = new CustomEvent('optionsPageReady');
 
-	function showMessage(msg) {
-		var el = document.getElementById(msg === 'error' ? 'error' : 'success');
-		el.style.display = 'inline';
-		setTimeout(function () {
-			el.style.display = 'none';
-		}, 2501);
-	}
-
 	function saveToStorage(val) {
 		storageOptions.area.set(val, function () {
-			showMessage(chrome.runtime.lastError ? showMessage('error') : showMessage('success'));
 			document.dispatchEvent(new CustomEvent('optionSaved', {
 				detail: {
 					success: chrome.runtime.lastError ? false : true,

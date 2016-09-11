@@ -11,7 +11,7 @@
 	--mainColor: #fff;
 	--mainPadding: .8rem;
 	--mainBR: 2px;
-	--mainBC: #2326a1;
+	--mainBC: var(--mainBgHover);
 	--mainShadowY: 2px;
 	--mainShadowBlur: 4px;
 	--mainShadowColor1: rgba(0, 0, 0, .12);
@@ -24,13 +24,13 @@
 	--contentFont: 300 normal calc(var(--subElHeight) / 2.5)/calc(var(--subElHeight) / 1.7) Arial Narrow;
 	--contentBg: #e2e1e0;
 	--contentColor: #444;
-	--contentBC: #e2e1e0;
+	--contentBC: var(--contentBg);
 
 	--itemBg: #fafbfc;
-	--itemCompletedBg: #3f51b5;
+	--itemCompletedBg: var(--mainBg);
 	--itemUncompletedBg: #d00;
-	--itemStateAnimDuration: .35s;
-	--itemStateAnimType: ease-in;
+	--itemStateAnimDuration: var(--mainAnimDuration);
+	--itemStateAnimType: var(--mainAnimType);
 	--itemStateShadowHover: 0 0 6px 2px var(--mainShadowColor1), 0 0 3px 1px var(--mainShadowColor2);
 	--itemShadow: 0 1px 2px var(--mainShadowColor1), 0 1px 2px var(--mainShadowColor2);
 	--itemShadowHover: 0 3px 4px var(--mainShadowColor1), 0 3px 4px var(--mainShadowColor2);
@@ -42,7 +42,7 @@
 	--settingsUnsaveBgHover: #f00;
 	--settingsBgHover: #999;
 	--settingsFont: 300 normal calc(var(--subElHeight) / 2.2)/calc(var(--subElHeight) / 1.3) Arial Narrow;
-	--settingsColor: #444;
+	--settingsColor: var(--contentColor);
 	--settingsOverlayBg: rgba(0, 0, 0, 0);
 	--settingsOverlayBgActive: rgba(0, 0, 0, .7);
 
@@ -52,18 +52,16 @@
 	--checkboxPadding: 2px;
 	--checkboxBR: 4px;
 	--checkboxFont: 700 normal calc(var(--subElHeight) / 2.5)/var(--checkboxHeight) Arial Narrow;
-	--checkboxColor: #444;
+	--checkboxColor: var(--contentColor);
 	--checkboxShadow: 0 0 8px 1px var(--mainShadowColor2);
 	--checkboxTextShadow: 0 1px 0 rgba(255, 255, 255, .5);
 
 	--selectArrowSize: 5px;
-	--selectArrowColor: #444;
+	--selectArrowColor: var(--contentColor);
 	--selectBC: #aaa;
 	--selectBg: #ccc;
 	--selectShadow: 0 0 8px 1px var(--mainShadowColor2);
 
-	--tooltipArrowSize: 5px;
-	--tooltipArrowColor: #666;
 	--tooltipBR: 4px;
 	--tooltipBC: #aaa;
 	--tooltipPadding: .45rem;
@@ -71,6 +69,8 @@
 	--tooltipColor: #eee;
 	--tooltipBg: #666;
 	--tooltipShadow: 0 0 2px 1px var(--mainShadowColor2);
+	--tooltipArrowSize: 5px;
+	--tooltipArrowColor: var(--tooltipBg);
 
 	--scrollWidth: calc(var(--mainPadding) / 2);
 	--scrollBg: rgba(200, 200, 200, .25);
@@ -390,7 +390,10 @@ html, body {
 
 			cursor: pointer;
 
-			transition: box-shadow var(--mainAnimDuration) var(--mainAnimType);
+			transition: box-shadow var(--mainAnimDuration) var(--mainAnimType),
+						border-radius var(--itemStateAnimDuration) var(--itemStateAnimType),
+						transform var(--itemStateAnimDuration) var(--itemStateAnimType),
+						background calc(var(--itemStateAnimDuration) * 2.85) var(--itemStateAnimType);
 
 			&:hover {
 				box-shadow: var(--itemStateShadowHover);
@@ -398,15 +401,13 @@ html, body {
 
 			&-completed {
 				background: var(--itemCompletedBg);
-				transition: all var(--itemStateAnimDuration) var(--itemStateAnimType);
 			}
 			&-uncompleted {
 				background: var(--itemUncompletedBg);
-				transition: all var(--itemStateAnimDuration) var(--itemStateAnimType);
 			}
 			&-click {
 				border-radius: 50%;
-				transform: rotate(-1080deg);
+				transform: rotate(-1440deg);
 			}
 		}
 		&__head {
