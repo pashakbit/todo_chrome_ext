@@ -9,7 +9,8 @@
 			completed: true,
 			order: 1,
 			url: "",
-			content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?"
+			content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?",
+			contentSize: 1
 		},
 		{
 			id: "2",
@@ -17,7 +18,8 @@
 			completed: false,
 			order: 2,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			contentSize: 1
 		},
 		{
 			id: "3",
@@ -25,7 +27,8 @@
 			completed: true,
 			order: 3,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			contentSize: 1
 		},
 		{
 			id: "4",
@@ -33,7 +36,8 @@
 			completed: false,
 			order: 4,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			contentSize: 1
 		},
 		{
 			id: "5",
@@ -41,7 +45,8 @@
 			completed: true,
 			order: 5,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum."
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			contentSize: 1
 		}]
 	});
 
@@ -152,21 +157,32 @@
 				return tasks;
 			},
 			toHtml: (tasks) => {
-				let tasksHtml = [], stateTask = "";
+				let tasksHtml = [],
+					stateTask = "",
+					contentSize = 1;
 
 				$.each(tasks, (i, task) => {
 					stateTask = (task.completed ? "completed" : "uncompleted");
+					contentSize = task.contentSize.toString();
 
 					tasksHtml.push([
-						"<li class='item' data-id='", task.id, "'>",
+						"<li class='item' data-id='", task.id, "' data-size='", contentSize, "'>",
 							"<img class='item__state item__state-", stateTask, "' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
 
-							"<span class='item__head' href='", task.url, "' title='", task.title, "' target='_blank'>",
+							"<span class='item__head' title='", task.title, "' target='_blank'>",
 								task.title,
 							"</span>",
 
 							"<div class='item__content'>",
 								task.content,
+							"</div>",
+
+							"<div class='arrow arrow-up'>",
+								"<img class='arrow__img' src='../img/item_arrow_up.png'>",
+							"</div>",
+
+							"<div class='arrow arrow-down'>",
+								"<img class='arrow__img' src='../img/item_arrow_down.png'>",
 							"</div>",
 						"</li>"
 					].join(""));
@@ -185,6 +201,8 @@
 					case "url":
 						return typeof value === "string";
 					case "order":
+						return typeof value === "number";
+					case "contentSize":
 						return typeof value === "number";
 					case "completed":
 						return typeof value === "boolean";
@@ -205,6 +223,7 @@
 		},
 		// ============================================================================ //
 
+		// -------------------------------- init block -------------------------------- //
 		init: (parent, tasksContainer) => {
 			$(parent).ready(() => {
 				app.setIcon("active");
@@ -220,8 +239,6 @@
 					)
 				);
 
-				app.setWidthСonsiderScroll($(tasksContainer).parent().attr("class"), tasksContainer);
-
 				app.binds(parent, tasksContainer, () => {
 					app.lock = false;
 				});
@@ -236,6 +253,7 @@
 
 			callback && callback();
 		},
+		// ============================================================================ //
 
 		// -------------------------------- lock block -------------------------------- //
 		lockBinds: (parent) => {
@@ -351,9 +369,14 @@
 		},
 		// ============================================================================ //
 
-		// ------------------------------- search block ------------------------------- //
+		// -------------------------------- items block ------------------------------- //
 		itemsBinds: (parent) => {
-			let itemClass = "item",
+			app.itemsCompletedBinds(parent);
+			app.itemsArrowsBinds(parent);
+		},
+		itemsCompletedBinds: (parent) => {
+			let itemState = null,
+				itemClass = "item",
 				itemClassState = "item__state",
 				itemClassCompleted = "item__state-completed",
 				itemClassUncompleted = "item__state-uncompleted",
@@ -364,14 +387,16 @@
 				rotateDuration = 300;
 
 			$(parent).on("click", "." + itemClassState, (e) => {
-				if (!$(e.target).hasClass(itemClassClick)) {
-					$(e.target).toggleClass(itemClassCompleted)
+				itemState = $(e.target);
+
+				if (!itemState.hasClass(itemClassClick)) {
+					itemState.toggleClass(itemClassCompleted)
 						.toggleClass(itemClassUncompleted)
 						.addClass(itemClassClick);
 
-					itemId = $(e.target).closest("." + itemClass).data("id").toString();
+					itemId = itemState.closest("." + itemClass).attr("data-id").toString();
 
-					if ($(e.target).hasClass(itemClassCompleted)) {
+					if (itemState.hasClass(itemClassCompleted)) {
 						app.Tasks.setProp(itemId, "completed", true);
 						itemSrc = "../img/completed.png";
 					} else {
@@ -383,29 +408,76 @@
 						clearTimeout(itemAnimTimeout);
 						itemAnimTimeout = null;
 
-						$(e.target).attr("src", itemSrc);
-						$(e.target).removeClass(itemClassClick);
+						itemState.attr("src", itemSrc);
+						itemState.removeClass(itemClassClick);
 					}, rotateDuration);
 				}
+			});
+		},
+		itemsArrowsBinds: (parent) => {
+			let item = null,
+				itemClass = "item",
+				contentSize = 1,
+				arrow = null,
+				arrowClass = "arrow",
+				arrowClassUp = "arrow-up",
+				arrowClassDown = "arrow-down",
+				sladeDuration = 300,
+				itemMain = $(parent).closest(".main"),
+				itemMinHeight = $(parent).find(".item__head").height(),
+				itemMidHeight = itemMinHeight * 2.5,
+				itemMainHeight = itemMain.height(),
+				itemMaxHeight = itemMidHeight;
+
+			$(parent).on("click", "." + arrowClass, (e) => {
+				arrow = $(e.target);
+				item = arrow.closest("." + itemClass);
+				contentSize = item.attr("data-size");
+
+				if (arrow.hasClass(arrowClassUp)) {
+					if (contentSize > 0) {
+						contentSize--;
+					}
+				} else {
+					if (contentSize < 2) {
+						contentSize++;
+					}
+				}
+
+				item.attr("data-size", contentSize);
+
+				switch (contentSize) {
+					case 0:
+						item.find("." + arrowClassUp).addClass("slade-out");
+						item.animate({height: itemMinHeight}, sladeDuration);
+						item.find(".item__content").removeClass("ovya");
+						break;
+					case 1:
+						item.find("." + arrowClassUp).removeClass("slade-out");
+						item.find("." + arrowClassDown).removeClass("slade-out");
+						item.animate({height: itemMidHeight}, sladeDuration);
+						item.find(".item__content").removeClass("ovya");
+						break;
+					case 2:
+						item.find("." + arrowClassDown).addClass("slade-out");
+
+						itemMaxHeight = item.find(".item__content").height() + itemMinHeight + 16;
+
+						if (itemMaxHeight > itemMainHeight) {
+							itemMaxHeight = itemMainHeight;
+							item.find(".item__content").addClass("ovya");
+						}
+
+						item.animate({height: itemMaxHeight}, sladeDuration);
+						break;
+				}
+
+				app.Tasks.setProp(item.attr("data-id").toString(), "contentSize", contentSize);
 			});
 		},
 		// ============================================================================ //
 
 		// --------------------------- additional funcrions --------------------------- //
-		setWidthСonsiderScroll: (bodyList, blockList) => {
-			let main = $(bodyList), list = $(blockList),
-				appHeight = $(".app").height(),
-				headerHeight = $(".header").height(),
-				footerHeight = $(".footer").height(),
-				maxHeight = appHeight - headerHeight - footerHeight;
-
-			if (list.height() > maxHeight) {
-				main.addClass("scroll-block");
-			} else {
-				main.removeClass("scroll-block");
-			}
-		},
-
 		saveSetsOnServer: (settings) => {
 			// $.ajax({
 			// 	url: config.host + "/users/" + config.userId + "/settings",

@@ -36,6 +36,8 @@
 	--itemShadowHover: 0 3px 4px var(--mainShadowColor1), 0 3px 4px var(--mainShadowColor2);
 	--itemSubContentColor: #757575;
 
+	--arrowShadow: 0 0 1px 1px var(--mainShadowColor1), 0 0 1px 1px var(--mainShadowColor2);
+
 	--settingsWidth: calc(var(--popupWidth) - var(--subElHeight));
 	--settingsBg: #e2e1e0;
 	--settingsUnsaveBg: #d00;
@@ -292,11 +294,16 @@ html, body {
 }
 
 .will-transform {
-	will-change: transform;
+	will-change: transform !important;
 }
-
+.slade-out {
+	transform: translateY(100%) !important;
+}
+.ovya {
+	overflow-y: auto !important;
+}
 .scroll-block {
-	padding-right: calc(var(--mainPadding) - var(--scrollWidth));
+	padding-right: calc(var(--mainPadding) - var(--scrollWidth)) !important;
 }
 /* ===================================================== */
 
@@ -371,7 +378,7 @@ html, body {
 	font: var(--contentFont);
 }
 .list {
-	width: 100%;
+	width: calc(var(--popupWidth) - var(--mainPadding) * 2);
 
 	margin: 0;
 	padding: 0;
@@ -379,10 +386,14 @@ html, body {
 	& .item {
 		@mixin item;
 
-		height: calc(var(--subElHeight) * 3);
+		height: calc(var(--subElHeight) * 2.4);
 
 		&:hover {
 			box-shadow: var(--itemShadowHover);
+
+			& .arrow {
+				transform: translateY(0);
+			}
 		}
 
 		&__state {
@@ -413,6 +424,7 @@ html, body {
 		&__head {
 			@mixin textElipsis;
 
+			position: relative;
 			display: inline-block;
 
 			width: calc(100% - var(--subElHeight));
@@ -425,23 +437,58 @@ html, body {
 
 			font: var(--contentHeadFont);
 		}
-		&__id {
-			position: absolute;
-			display: none;
-
-			/* top: calc(var(--subElHeight) + (var(--mainPadding) / 4));
-			right: var(--mainPadding);
-
-			color: var(--itemSubContentColor);
-
-			font: var(--contentFont); */
-		}
 		&__content {
+			position: relative;
 			display: block;
 
 			width: 100%;
 
 			padding: 0 var(--mainPadding);
+		}
+	}
+	& .arrow {
+		position: absolute;
+		display: block;
+
+		width: 50%;
+		height: calc(var(--subElHeight) * .5);
+		line-height: calc(var(--subElHeight) * .5);
+
+		bottom: 0;
+
+		background: var(--itemBg);
+		opacity: .6;
+
+		text-align: center;
+		cursor: pointer;
+
+		transition: box-shadow var(--mainAnimDuration) var(--mainAnimType),
+					opacity var(--mainAnimDuration) var(--mainAnimType),
+					transform var(--mainAnimDuration) var(--mainAnimType);
+
+		transform: translateY(100%);
+
+		&:hover {
+			z-index: 2;
+
+			box-shadow: var(--arrowShadow);
+			opacity: .95;
+		}
+
+		&__img {
+			display: inline-block;
+
+			width: calc(var(--subElHeight) * .4);
+			line-height: calc(var(--subElHeight) * .5);
+
+			margin-bottom: 2px;
+		}
+
+		&-up {
+			left: 0;
+		}
+		&-down {
+			right: 0;
 		}
 	}
 }
