@@ -5,8 +5,8 @@
 	chrome.storage.sync.set({
 		tasks: [{
 			id: "1",
-			title: "First task",
-			completed: true,
+			title: "Add ui add",
+			completed: false,
 			order: 1,
 			url: "",
 			content: "Task description. How can anyone use the Todo app, if this app don't care about just simple thing as a task description?",
@@ -14,7 +14,7 @@
 		},
 		{
 			id: "2",
-			title: "Smoll",
+			title: "Add ui set",
 			completed: false,
 			order: 2,
 			url: "",
@@ -23,16 +23,16 @@
 		},
 		{
 			id: "3",
-			title: "It's task have medium head size",
+			title: "Test task for resize height and change scrollTop",
 			completed: true,
 			order: 3,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis obcaecati suscipit laudantium est delectus voluptatibus odit voluptatum aut! Perferendis, debitis. Eveniet temporibus laudantium assumenda explicabo inventore praesentium voluptas autem magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia qui consequatur ullam sint tenetur, vel minus sed voluptatibus, quia non, enim temporibus assumenda laborum repellat. Consequuntur delectus laborum nam dolor? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, aut. Quam velit eveniet accusantium, quidem, sapiente debitis laudantium officiis voluptatem soluta ad quisquam et cupiditate exercitationem? Temporibus, libero provident aut. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione ab qui laudantium dolor, sit doloremque aliquid earum nesciunt vero ullam commodi, blanditiis numquam natus libero repellat odit cum, ipsa nostrum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus dolorum, illo laboriosam aliquid ut rem expedita, sed reiciendis quo soluta laborum, labore voluptas provident ullam fugiat totam quos est possimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus nemo vero provident repudiandae fugit autem fuga quod deleniti quo soluta animi suscipit hic fugiat architecto eligendi aut laboriosam, eaque deserunt. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
 			contentSize: 1
 		},
 		{
 			id: "4",
-			title: "It's task have Large head size for testing UI on my browser",
+			title: "Add ui delete",
 			completed: false,
 			order: 4,
 			url: "",
@@ -41,11 +41,11 @@
 		},
 		{
 			id: "5",
-			title: "Task with many space                                         ",
+			title: "Test task too (last task)",
 			completed: true,
 			order: 5,
 			url: "",
-			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum.",
+			content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem eum sequi, voluptatibus magnam vero cumque aut voluptates tenetur quae. Aliquid dolorem provident, illo quas molestias praesentium obcaecati animi ea at. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis enim vero odio aliquid fuga. Laborum quidem voluptate dignissimos, nesciunt iste unde voluptatum at, cumque incidunt, saepe nisi tenetur aspernatur vitae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea minus velit aspernatur sed alias itaque perferendis, quis at neque maxime, amet fugit delectus accusamus, culpa unde dolorem qui obcaecati repellat? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel veniam enim culpa excepturi nostrum fugit temporibus iure sed deserunt necessitatibus. Ipsam quasi, ipsum aliquid illum labore officiis voluptate assumenda laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque consectetur eius sapiente accusamus facilis doloribus, minima, ipsam quo dolorum qui animi amet reprehenderit. Iste molestiae animi illo assumenda adipisci soluta.",
 			contentSize: 1
 		}]
 	});
@@ -415,18 +415,19 @@
 			});
 		},
 		itemsArrowsBinds: (parent) => {
-			let item = null,
+			let mainClass = "main",
+				item = null,
 				itemClass = "item",
 				contentSize = 1,
 				arrow = null,
 				arrowClass = "arrow",
 				arrowClassUp = "arrow-up",
 				arrowClassDown = "arrow-down",
-				sladeDuration = 300,
+				animDuration = 300,
 				itemMain = $(parent).closest(".main"),
 				itemMinHeight = $(parent).find(".item__head").height(),
 				itemMidHeight = itemMinHeight * 2.5,
-				itemMainHeight = itemMain.height(),
+				itemMainHeight = itemMain.height() - 10,
 				itemMaxHeight = itemMidHeight;
 
 			$(parent).on("click", "." + arrowClass, (e) => {
@@ -449,26 +450,35 @@
 				switch (contentSize) {
 					case 0:
 						item.find("." + arrowClassUp).addClass("slade-out");
-						item.animate({height: itemMinHeight}, sladeDuration);
+						item.animate({height: itemMinHeight}, animDuration);
 						item.find(".item__content").removeClass("ovya");
+
 						break;
 					case 1:
 						item.find("." + arrowClassUp).removeClass("slade-out");
 						item.find("." + arrowClassDown).removeClass("slade-out");
-						item.animate({height: itemMidHeight}, sladeDuration);
+						item.animate({height: itemMidHeight}, animDuration);
 						item.find(".item__content").removeClass("ovya");
+
 						break;
 					case 2:
 						item.find("." + arrowClassDown).addClass("slade-out");
 
-						itemMaxHeight = item.find(".item__content").height() + itemMinHeight + 16;
+						itemMaxHeight = item.find(".item__content").height() + itemMinHeight;
 
 						if (itemMaxHeight > itemMainHeight) {
 							itemMaxHeight = itemMainHeight;
 							item.find(".item__content").addClass("ovya");
+
+							item.animate({height: itemMaxHeight}, animDuration);
+
+							$("." + mainClass).animate({
+								scrollTop: item.position().top + $("." + mainClass).scrollTop() - itemMinHeight - 11
+							}, animDuration);
+						} else {
+							item.animate({height: itemMaxHeight}, animDuration);
 						}
 
-						item.animate({height: itemMaxHeight}, sladeDuration);
 						break;
 				}
 
