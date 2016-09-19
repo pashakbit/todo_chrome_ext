@@ -22,9 +22,9 @@ var gulp = require("gulp"),
 		require("postcss-foreach"),
 		cssNext({
 			"nesting": true,
-			"browsers": ["Chrome >= 42"],
+			"browsers": ["Chrome >= 38"],
 			"autoprefixer": {
-				"browsers": ["Chrome >= 42"]
+				"browsers": ["Chrome >= 38"]
 			},
 			"sourcemap": false
 		}),
@@ -45,7 +45,7 @@ var gulp = require("gulp"),
 			src: sourceDir + "**/*.json"
 		},
 		img: {
-			src: sourceDir + "img/**/*.+(jpg|jpeg|png|gif)"
+			src: sourceDir + "img/**/*.+(jpg|jpeg|png|gif|svg)"
 		}
 	};
 

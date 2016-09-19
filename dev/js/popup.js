@@ -55,7 +55,6 @@
 
 		// ------------------------ Logic for work with tasks ------------------------- //
 		Tasks: {
-			serverContentInTitle: true,				// I hope, that this is stopgap only
 			itemVars: ["id", "title", "completed" ,"order", "url", "content"],
 			items: [],
 
@@ -167,10 +166,14 @@
 
 					tasksHtml.push([
 						"<li class='item' data-id='", task.id, "' data-size='", contentSize, "'>",
-							"<img class='item__state item__state-", stateTask, "' src='../img/", stateTask, ".png' title='Task ", stateTask, "'>",
+							"<img class='item__state item__state-", stateTask, "' src='../img/", stateTask, ".svg' title='Task ", stateTask, "'>",
 
 							"<span class='item__head' title='", task.title, "' target='_blank'>",
 								task.title,
+								"<div class='item__options'>",
+									"<img class='item__option item__option-edit' src='../img/item_edit.svg'>",
+									"<img class='item__option item__option-delete' src='../img/item_delete.svg'>",
+								"</div>",
 							"</span>",
 
 							"<div class='item__content'>",
@@ -178,11 +181,11 @@
 							"</div>",
 
 							"<div class='arrow arrow-up'>",
-								"<img class='arrow__img' src='../img/item_arrow_up.png'>",
+								"<img class='arrow__img' src='../img/item_arrow.svg'>",
 							"</div>",
 
 							"<div class='arrow arrow-down'>",
-								"<img class='arrow__img' src='../img/item_arrow_down.png'>",
+								"<img class='arrow__img' src='../img/item_arrow.svg'>",
 							"</div>",
 						"</li>"
 					].join(""));
@@ -373,6 +376,7 @@
 		itemsBinds: (parent) => {
 			app.itemsCompletedBinds(parent);
 			app.itemsArrowsBinds(parent);
+			app.itemsOptionsBinds(parent);
 		},
 		itemsCompletedBinds: (parent) => {
 			let itemState = null,
@@ -398,10 +402,10 @@
 
 					if (itemState.hasClass(itemClassCompleted)) {
 						app.Tasks.setProp(itemId, "completed", true);
-						itemSrc = "../img/completed.png";
+						itemSrc = "../img/completed.svg";
 					} else {
 						app.Tasks.setProp(itemId, "completed", false);
-						itemSrc = "../img/uncompleted.png";
+						itemSrc = "../img/uncompleted.svg";
 					}
 
 					itemAnimTimeout = setTimeout(() => {
@@ -483,6 +487,15 @@
 				}
 
 				app.Tasks.setProp(item.attr("data-id").toString(), "contentSize", contentSize);
+			});
+		},
+		itemsOptionsBinds: (parent) => {
+			let item = null,
+				itemClass = "item",
+				animDuration = 300;
+
+			$(parent).on("click", "." + itemClass, (e) => {
+
 			});
 		},
 		// ============================================================================ //

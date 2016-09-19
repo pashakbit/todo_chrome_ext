@@ -19,6 +19,7 @@
 	--mainAnimDuration: .3s;
 	--mainAnimType: ease-out;
 	--mainInlineSpace: .3rem;
+	--mainIconPadding: calc(var(--mainPadding) * .5);
 
 	--contentHeadFont: 300 normal calc(var(--subElHeight) / 2.2)/var(--subElHeight) Arial Narrow;
 	--contentFont: 300 normal calc(var(--subElHeight) / 2.5)/calc(var(--subElHeight) / 1.7) Arial Narrow;
@@ -98,6 +99,8 @@
 
 	width: 100%;
 	height: 100%;
+
+	padding: var(--mainIconPadding);
 
 	cursor: pointer;
 }
@@ -400,6 +403,7 @@ html, body {
 		&__state {
 			@mixin btnStyles;
 
+			padding: var(--mainIconPadding);
 			cursor: pointer;
 
 			transition: box-shadow var(--mainAnimDuration) var(--mainAnimType),
