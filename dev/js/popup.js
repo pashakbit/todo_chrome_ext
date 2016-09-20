@@ -181,11 +181,11 @@
 							"</div>",
 
 							"<div class='arrow arrow-up'>",
-								"<img class='arrow__img' src='../img/item_arrow.svg'>",
+								"<img class='arrow__img' src='../img/item_arrow_up.svg'>",
 							"</div>",
 
 							"<div class='arrow arrow-down'>",
-								"<img class='arrow__img' src='../img/item_arrow.svg'>",
+								"<img class='arrow__img' src='../img/item_arrow_down.svg'>",
 							"</div>",
 						"</li>"
 					].join(""));
@@ -468,7 +468,7 @@
 					case 2:
 						item.find("." + arrowClassDown).addClass("slade-out");
 
-						itemMaxHeight = item.find(".item__content").height() + itemMinHeight;
+						itemMaxHeight = item.find(".item__content").height() + itemMinHeight + 12;
 
 						if (itemMaxHeight > itemMainHeight) {
 							itemMaxHeight = itemMainHeight;
